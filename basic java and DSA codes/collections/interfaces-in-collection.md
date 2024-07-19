@@ -50,6 +50,42 @@ Duplicates are allowed | Not allowed
 Insertion order preserved | not maintained
 
 
-**Queue(I)**
+**Queue(I) - 1.5v**
 - Queue is the child interface of Collection.
-- 
+- If we want to represent a group of individual objects prior to processing then, we should go for Queue.
+- Usually, Queue follows First In First Out order, but based on our requirement we can implement our own priority order also.
+- Example: Before sending a mail, all mail id's we have to store in some data structure. In which order we added mail id's in the same order only mail should be delivered for this requirement Queue is best choice.
+- Implemetation classes: PriorityQueue
+- BlockingQueue- this has two child classes:1) PriorityBlockingQueue 2) LinkedBlockingQueue
+- All concepts came in 1.5v
+
+  Note: All the above Interfaces( Collection, List, Set, SortedSet, NavigableSet, Queue) meant for representing a group of individual objects, If we want to represent a group of objects as key-value pairs then we should go Map.
+
+
+  **Map(I) - 1.2v**
+  - Map is *not* child interface of Collection.
+  - If we want to represent a group of objects as key-value pair then we should go for Map.
+  - both key and value are objects only.
+  - Duplicate keys are not allowed but values can be duplicated.
+  - Implementation classes: HashMap(1.2v), LinkedHashMap(1.4v), WeakHashMap(1.2v), IdentityHashMap(1.4v), Hashtable
+  - Dictionary(AC)<---Hashtable(C)<----Properties(C)  <= All came in 1.0v(Legacy classes)
+ 
+  **SortedMap(I)-1.2v**
+
+  - It is the child interface of Map.
+  - If we want to represent a group of key value pairs according to some *sorting order of keys* then we should go for SortedMap.
+  - In SortedMap the sorting should be based on key but not based on value.
+ 
+  **NavigableMap(I)- 1.6v**
+
+  - it is the child interface of SortedMap
+  - It defines sevaral methods for navigation purposes.
+  - Implementation Class: TreeMap(1.2v)
+ 
+ ![image](https://github.com/user-attachments/assets/ecc119fc-0f0b-4b97-9e7f-1da1b5ac0b7a)
+
+
+
+![image](https://github.com/user-attachments/assets/8e841723-5c63-408f-a66e-08d8c3a28140)
+
+
