@@ -15,9 +15,14 @@
 - In general, collection interface is considered as *root* interface of collection framework.
 - there is no concret class which implements collection interface directly.
 
-  Collection   | Collections
+
+Collection  | Collections
 ------------- | -------------
-  Collection is a interface, if we want to represent a group of individual objects a single entity then we should go for **Collection** | Collections is an utility class present in java.util package to define sevaral utility methods for collection objects.like sorting, searching etc.
+Collection is a interface  |  Collections is an utility class present in java.util package.
+if we want to represent a group of individual objects a single entity => **Collection**  | To define sevaral utility methods for collection objects.like sorting, searching etc.
+
+
+
 
 
   **List(I) - 1.2v**(Duplicates Allowed, Insertion order Preserved)
@@ -88,4 +93,8 @@ Insertion order preserved | not maintained
 
 ![image](https://github.com/user-attachments/assets/8e841723-5c63-408f-a66e-08d8c3a28140)
 
+
+**Collection(I)**
+- If we want to represent a group of Individual objects as a single entity then we should go Collection.
+- Collection interface defines the most common methods which are applicable for any collection object.
 
