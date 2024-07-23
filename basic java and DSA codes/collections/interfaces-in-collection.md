@@ -207,8 +207,89 @@ class ArrayListDemo {
 }
 ```
 
-  
+**When should use/ not use ArrayList**
+- ArrayList is a best choice if our frequent operation is retrival operation, because ArrayList implements RandomAccess interface.
+- ArrayList is a worst choice if our frequent operation is insertion/deletion in the middle.(Recommondade LinkedList)
+example: list.remove(2,"B");
 
+**Differences Between ArrayList & Vector:**
+
+ArrayList  | Vector
+------------- | -------------
+Every method present in the ArrayList is Non-synchronized | Every method present in the Vector is a synchronized
+At a time, multiple threads are allowed to operate on ArrayList object, not thread safe  | Only one thread allowed to operate, hence thread safe.
+Relatively performance is high, because threads are not required to wait to operate on ArrayList object | Relatively performance is low, because thread are required to wait to operate on Vector object.
+Introduced in 1.2v and it is a Non-legacy class | Introduced in 1.0v, and it is a legacy class of Collection.
+
+
+**How to get synchronized version of ArrayList object?**
+
+By default, ArrayList is non synchronized, but we can get synchronized version of ArrayList object by using **synchronzedList()**
+of *Collections* class.
+
+```
+public static List synchronzedList(List l)
+{}
+```
+Example:
+```
+ArrayList l = new ArrayList();
+List l1 = Collections.synchronizedList(l);
+where, l is non-synchronized & l1 is synchronized.
+```
+
+Similarly, we can get synchronized version of Set & Map object by using the following methods of Collections class:
+```
+public static Set synchronizedSet(Set s){
+}
+
+public static Map synchronizedMap(Map m){
+}
+```
+**LinkedList(C)**:
+- The underlying data structure is doubly LinkedList.
+- Insertion order is preserved and duplicates objects are allowed.
+- Heterogeneous objects are allowed and null insertion is possible.
+- LinkedList implements Seriablizable & Cloneable interfaces but not RandomAccess.
+- LinkedList is the best choice if our frequest operation is insertion in middle.
+- LinkedList is the worst choice if our frequest operation is retrival.
+
+  **Contructors in LinkedList:**
+  - LinkedList list= new LinkedList();
+   Creates an empty LinkedList objec.
+  - LinkedList list= new LinkedList(Collection c);
+  Create an equivalent LinkedList object for the given Collection.
+
+ **LinkedList class specific methods:**
+ Usually, we can use LinkedList to develop Stacks & Queues. To provide support for this requirement, LinkedList class defines the following specific methods
+
+  void addFirst(Object o)
+  void addLast(Object o)
+  Object getFirst()
+  Object getLast()
+  Object removeFirst()
+  Object removeLast()
+
+Example code:
+```
+import java.util.*;
+class LinkedListDemo {
+    public static void main(String[] args) {
+        LinkedList list = new LinkedList();
+        list.add("amol");
+        list.add(101);
+        list.add(null);
+        list.add("amol");//[amol, 101, null, amol]
+        
+        list.set(0, "kajal");//[kajal, 101, null, amol]
+        
+        list.add(0, "anjali");//[anjali, kajal, 101, null, amol]
+        list.removeLast();
+        list.addFirst("Dyaneshwar");//[Dyaneshwar, anjali, kajal, 101, null]
+        System.out.println(list);     
+    }
+}
+```
 
    
 
