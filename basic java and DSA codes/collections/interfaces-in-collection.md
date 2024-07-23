@@ -97,4 +97,120 @@ Insertion order preserved | not maintained
 **Collection(I)**
 - If we want to represent a group of Individual objects as a single entity then we should go Collection.
 - Collection interface defines the most common methods which are applicable for any collection object.
+- methods which are present in Collection:
+boolean add(Object o)
+boolean addAll(Collection c)
+boolean remove(Object o)
+boolean removeAll(Collection c)
+boolean retainAll(Collection c) - this is also one more removal method which removes everything except the Collection that we are passing in a function as an argument.
+void clear(): clear/remove everything from Collection.
+boolean contains(Object o)
+boolean containsAll(Collection c)
+boolean isEmpty()
+int size()
+Object[] toArray()
+Iterator iterator()
+
+*Note: there is no concret class which implemenents Collection interface directly.*
+
+**List(I)**
+- List is a child interface of Collection.
+- if we want to represent a group of individual objects as a single entity where duplicates are allowed and insertion order must be preserved, then we should go for List.
+- we can preserve insertion order via index and we can differentiate duplicate objects by using index. Hence index will play very important role in List.
+- method which are present in List interface:
+void add(int  index, Object o): add element at specified index, if that index already contain any element then it will shift to the next vacant space, and element will get added to the specified index.
+example below:
+```
+     l.add(1,10)
+```
+output: 
+```
+[1, 2, 3]
+[1, 10, 2, 3
+```
+
+- want to add group of object starting from the specified index:
+boolean addAll( int index, Collection c)
+
+
+Object remove(int index)
+Object get(int index)
+Object set(int index, Object o)
+int indexOf(Object o): return the first occurance index.
+int lastIndexOf(Object o): return the last occurance index.
+ListIterator listIterator()
+
+**ArrayList(c)**
+- The underlying data structure is resizable array or growable array.
+- Duplicates are allowed.
+- Insertion order is preserved.
+- Heterogeneous objects are allowed.(Except TreeSet & TreeMap everywhere heterogeneous objects are allowed.)
+- null insertion is possible.
+
+  **Constructors:**
+ 1.  ArrayList list = new ArrayList();
+  creates an empty ArrayLst, with default initial capacity 10, Once ArrayList reaches its max capacity then a new ArrayList object will be created with:
+```
+  newCapacity = (currentCapacity * 3/2)+1
+```
+2. ArrayList l= new ArrayList(int initialCapacity);
+   Created an empty ArrayList object with specified initialCapacity.
+3. ArrayList l= new ArrayList(Collection c);
+   Creates an equivalent ArrayList object for the given Collection.
+
+Example:
+```
+import java.util.*;
+class ArrayListDemo {
+    public static void main(String[] args) {
+        ArrayList l = new ArrayList();
+        l.add("A");
+        l.add(10);
+        l.add("A");
+        l.add(null);
+        System.out.println(l);
+        l.add(2,"M");
+        l.add("N");
+        System.out.println(l);
+    }
+}
+```
+Output: 
+```
+Note: /tmp/QaW0SMK88D/ArrayListDemo.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+java -cp /tmp/QaW0SMK88D/ArrayListDemo
+[A, 10, A, null]
+[A, 10, M, A, null, N]
+```
+
+Note: We are getting warning on console, because since java 1.5, it is highly recommonded to use Generic for type safety purpose.
+
+
+- Usually, we can use Collection to hold and transfer objects from one location to another(Container). to provide support for this requirement every Collection class implements serializable and Clonable interfaces.
+- ArrayList & Vector classes implements RandomAccess interface, so that any random element we can access with the same speed.
+
+**RandomAccess(I):**
+This interface present in java.util package and it doesn't contain method, it is a **MarkerInterface**, where required ability will be provided automatically by the **JVM**.
+
+```
+import java.util.*;
+class ArrayListDemo {
+    public static void main(String[] args) {
+        ArrayList l1 = new ArrayList();
+        LinkedList l2= new LinkedList();
+       //System.out.println(l2  instanceof Serializable);check why this is not working
+        System.out.println(l1  instanceof Cloneable); //true
+        System.out.println(l1  instanceof RandomAccess); //true
+        System.out.println(l2  instanceof RandomAccess); //false
+    }
+}
+```
+
+  
+
+
+   
+
+  
 
