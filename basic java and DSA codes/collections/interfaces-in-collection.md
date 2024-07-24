@@ -290,6 +290,26 @@ class LinkedListDemo {
     }
 }
 ```
+**Differences between ArrayList & LinkedList**
+
+ArrayList  | LinkedList
+------------- | -------------
+ArrayList is the best choice is our frequest operation is retrival  | LinkedList is the best choice if our frequent operation is insertion/deletion in the middle.
+ArrayList is the worst choice if our frequent operation is insertion/updation in middle  | LinkedList is the worst choice if our frequent operation is retrival.
+In ArrayList, Elements are stored in consecutive memory location, hence retrival operation become easy | LinkedList elements are stored at Random location, hence retrival operation become complecated.
+Underlying data structure used is Array | Underlying data structure used is doubly linkedlist.
+
+
+**Vector(C)**
+
+- 
+
+
+
+
+
+
+
 
    
 
