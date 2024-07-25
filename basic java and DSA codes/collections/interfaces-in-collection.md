@@ -506,11 +506,160 @@ class EnumerationDemo {
 }
 ```
 
+**Limitations of Enumerations(1.0v)**
+- We can apply Enemuration concepts only for legacy classes and it is not a universal cursor.
+- By using Enumeration, we can get only read access and we can't perform **remove** operation.
+
+*To overcome above limitations we should go for Iterator*
+
+**Iterator**
+- We can apply iterator concept for any Collection object and hence it is a universal cursor.
+- By using Iterator we can perform both **read & remove** operations.
+- We can create Iterator object by using iterator() of Collection interface.
+ ```
+public Iterator iterator();
+
+example:
+Iterator itr = c.iterator();
+where, c is any Collection object.
+```
+ - methods:
+public boolean hasNext();
+public Object next();
+public void remove();
 
 
+Iterator Demo Code:
+```
+import java.util.*;
+class HelloWorld {
+    public static void main(String[] args) {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("am");
+        list.add("ak");
+        list.add("au");
+        list.add("ai");
+        
+        Iterator<String> itr = list.iterator();
+        while(itr.hasNext()){
+            String str = itr.next();
+            if(str.contains("ai")){
+                System.out.print(str+" ");
+            }else{
+                itr.remove();
+            }
+        }
+    }
+}
+```
+
+**Limitations of Iterator**
+1. By using Enumeration & Iterator we can always move only towards forward direction and we can't move towards backward direction these are single direction cursors but not bidirectional cursor.
+2. By using Iterator, we can perform only **Read & Remove** operations and we can't perform **replacement & addition** of new objects.
 
 
+To overcome above limitations, we should go for **ListIterator**.
 
+**ListIterator**
+- By using ListIterator, we can move either to the forward or to the backward direction and hence it is **Bi-directional** cursor.
+- By using ListIterator, we can perform **Replacement & Addition** of new objects, in addition to **Read & Remove** operations.
+- ListIterator is the child interface of Iterator and hence all method present in Iterator by default available to the ListIterator.
+
+We can create ListIterator, by using listIterator() of **List** interface.
+
+```
+public ListIterator listiterator();
+
+ListIterator ltr = list.listIterator();
+where, list is any List object.
+```
+
+
+ListIterator defines the following methods:
+1. public boolean hasNext();
+2. public Object next();
+3. public int nextIndex();
+
+*above 3 are for forward movement.*
+4. public boolean hasPrevious();
+5. public Object previous();
+6. public int previousIndex();
+
+*above 3 are for backward movement.*
+
+7. public void remove();
+8. public void add(Object o);
+9. public void set(Object o);
+
+*above 3 are for add, remove & replacement operation.*
+
+ListIterator demo code
+```
+import java.util.*;
+class ListIteratorDemo {
+    public static void main(String[] args) {
+        LinkedList list = new LinkedList<>();
+        list.add("amol");
+        list.add("ajay");
+        list.add("suraj");
+        list.add("mani");
+        
+        ListIterator itr = list.listIterator();
+        System.out.println(list);
+        while(itr.hasNext()){
+            String str = (String)itr.next();
+            if(str.equals("mani")){
+                itr.remove(); //[amol, ajay, suraj]
+            }else if(str.equals("suraj")){
+                itr.add("santosh");//[amol, ajay, suraj, santosh]
+            }else if(str.equals("ajay")){
+                itr.set("vijay");//[amol, vijay, suraj, santosh]
+            }
+        }
+        System.out.println(list);
+    }
+}
+```
+
+
+**Note**: The most powerful cursor is ListIterator but its limitation is it is application only List implementated objects.
+
+    
+ 
+Property | Enumeration | Iterator | ListIterator | 
+---------|-------------|----------|--------------|
+where we can apply? | Applicable only for legacy classes | applicable for any Collection objects | only for List objects |
+is it legacy ? | Yes 1.0v | No 1.2v | No 1.2v |
+movement | single direction cursor(only forward) | single direction cursor(only forward) | bi-directional cursor |
+allowed operations | only read operation | read and remove | read, remove, replace(using set()), add |
+how we can get? | by using elements() of Vector class | by using iterator() of Collection interface | by using listIterator() of List interface|
+methods | 2- hasMoreElements(), nextElement() | 3- hasNext(), next(), remove() | 9 methods |
+
+
+** Know the implemented classes of all 3 cursors as all we are using is interfaces, we are creating the object of implemented class not of the interface**
+
+```
+import java.util.*;
+class ImplementedClassesDemo {
+    public static void main(String[] args) {
+        Vector v = new Vector();
+        Enumeration e = v.elements();
+        Iterator itr = v.iterator();
+        ListIterator ltr = v.listIterator();
+        
+        System.out.println(e.getClass().getName());
+        System.out.println(itr.getClass().getName());
+        System.out.println(ltr.getClass().getName());
+    }
+}
+```
+
+Output: note, before $ we have the outer class after $ we have the inner class of that outer class.
+```
+java.util.Vector$1
+java.util.Vector$Itr
+java.util.Vector$ListItr
+```
    
 
   
