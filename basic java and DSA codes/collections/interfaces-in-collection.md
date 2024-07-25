@@ -302,9 +302,209 @@ Underlying data structure used is Array | Underlying data structure used is doub
 
 **Vector(C)**
 
-- 
+- Resizable Array/ Growable array
+- Duplicates allowed, insertion order preserved.
+- Heterageneous Elements & null insertions allowed.
+- Vector class implements Serializable, Cloneable & RandomAccess interface.
+- Every method present in the vector is synchronized and hence Vector object is thread safe.
 
+  **Constructors of Vector:**
+  -  Vector v = new Vector();
+    It creates an empty Vector object of default size of 10, once Vector object reaches to its initial default capacity then a new vector object created with *double size*
+```
+newCapacity = currentCapacity*2
+```
 
+   - Vector v = new Vector(int initialCapacity);
+It creates an empty Vector object with the specified initial capacity.
+
+   - Vector v = new Vector(int initialCapacity, int increamentalCapacity);
+   - Vector v = new Vector(Collection c);
+It creates an equivalent Vector object for the given collection. this contructor meant for interconversion between Collection objects.
+
+    **Vector class Specific methods hint: old generation long names**
+
+ - To add element   
+ add(Object o) --> Collection
+ add(int idx, Object o)---> List 
+ addElement(Object o) ---> Vector
+
+- To remove specific element based on Object & index
+ remove(Object o);---> C
+ remove(int index, Object o)---> L
+ removeElement(Object o) ----> V
+
+- To remove everything from Collection
+ clear()----> C
+ removeAllElements()---> V
+ removeElementAt(int index)
+
+ - To get objects:
+Object get(int index)---> L
+Object elementAt(int index)--->V
+Object firstElement()--> V
+Object lastElement()----> V
+
+- other methods of Vector class
+size()
+capacity()
+Enumeration elements()
+
+- Demo code:
+```
+import java.util.*;
+class VectorDemo {
+    public static void main(String[] args) {
+        Vector v = new Vector();
+         System.out.println(v.capacity());//10
+        for(int i=1;i<=10;i++){
+            v.addElement(i);
+        }
+        System.out.println(v.capacity());//10
+        v.addElement("amol");//11th element added
+        System.out.println(v.capacity());//size doubled 20
+        System.out.println(v);
+    }
+}
+```
+
+Example with initialCapacity vector object:
+```
+import java.util.*;
+class VectorDemo {
+    public static void main(String[] args) {
+        Vector v = new Vector(22);
+         System.out.println(v.capacity());//22
+        for(int i=1;i<=10;i++){
+            v.addElement(i);
+        }
+        System.out.println(v.capacity());//22
+        v.addElement("amol");
+        System.out.println(v.capacity());//22
+        System.out.println(v);
+    }
+}
+```
+Example with incremental capacity
+```
+import java.util.*;
+class VectorDemo {
+    public static void main(String[] args) {
+        Vector v = new Vector(10,3);
+         System.out.println(v.capacity());//10
+        for(int i=1;i<=10;i++){
+            v.addElement(i);
+        }
+        System.out.println(v.capacity());//10
+        v.addElement("amol");
+        System.out.println(v.capacity());//13 after adding 11th element
+        System.out.println(v);
+    }
+}
+```
+
+**Stack(C)**
+
+- It is the child class of Vector.
+- Specially designed class for Last In First Out *LIFO*.
+- Constructor only once:
+```
+Stack s = new Stack();
+```
+- Stack class methods:
+Object push() - to add object
+Object pop() - remove the top object of Stack
+Object peek() - return the top of Stack without removal
+boolean empty() - check Stack is empty or not
+int search(Object o) - if object present then it returns the offset of Object, otherwise returns -1;
+
+Example of search("C") = 3
+
+| 3 | C| 2  |
+|---|--|----|
+| 2 | B|  1 |
+| 1 | A|  0 |
+|OfS|ele|idx
+
+Example sample code:
+
+```
+import java.util.*;
+class StackDemo {
+    public static void main(String[] args) {
+        Stack s = new Stack();
+        s.push("A");
+        s.push("B");
+        s.push("C");
+        
+        System.out.println(s.search("A"));
+        System.out.println(s.search("B"));
+        System.out.println(s.search("C"));
+        System.out.println(s.search("V"));
+        System.out.println(s.peek());
+        s.pop();
+        System.out.println(s);
+        
+    }
+}
+```
+Output
+```
+3
+2
+1
+-1
+C
+[A, B]
+```
+
+**3 Cursors of Java**
+
+If you want the objects from Collection one by one then we should go for Cursors. There are three types of cursors available in java.
+
+1. Enumeration
+2. Iterator
+3. ListIterator
+
+**Enumeration**
+
+We can use Enumeration to get Objects one by one from legacy Collection object. we can create Enumeration object by using *elements()* of Vector class.
+```
+Public Enumeration elements();
+example: 
+Vector v = new Vector();
+Enumeration e = v.elements();
+```
+
+Method of Enumeration:
+```
+public boolean hasMoreElements();
+public Object nextElement();
+```
+
+Example code for Enumeration:
+```
+import java.util.*;
+class EnumerationDemo {
+    public static void main(String[] args) {
+       Vector v = new Vector();
+       for(int i=0;i<=10;i++){
+           v.addElement(i);
+       }
+       System.out.println("All Elements: "+ v);
+       Enumeration e = v.elements();
+       while(e.hasMoreElements()){
+           int i = (int)e.nextElement();
+           if(i % 2 ==0){
+            System.out.print(i+" ");   
+           }else{
+               v.removeElement((Object)i);
+           }
+       }
+       System.out.println("remaining elements: "+v);
+    }
+}
+```
 
 
 
