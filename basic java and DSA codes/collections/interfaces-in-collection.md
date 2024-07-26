@@ -98,6 +98,7 @@ Insertion order preserved | not maintained
 - If we want to represent a group of Individual objects as a single entity then we should go Collection.
 - Collection interface defines the most common methods which are applicable for any collection object.
 - methods which are present in Collection:
+```
 boolean add(Object o)
 boolean addAll(Collection c)
 boolean remove(Object o)
@@ -110,7 +111,7 @@ boolean isEmpty()
 int size()
 Object[] toArray()
 Iterator iterator()
-
+```
 *Note: there is no concret class which implemenents Collection interface directly.*
 
 **List(I)**
@@ -118,7 +119,9 @@ Iterator iterator()
 - if we want to represent a group of individual objects as a single entity where duplicates are allowed and insertion order must be preserved, then we should go for List.
 - we can preserve insertion order via index and we can differentiate duplicate objects by using index. Hence index will play very important role in List.
 - method which are present in List interface:
+```
 void add(int  index, Object o): add element at specified index, if that index already contain any element then it will shift to the next vacant space, and element will get added to the specified index.
+```
 example below:
 ```
      l.add(1,10)
@@ -128,8 +131,8 @@ output:
 [1, 2, 3]
 [1, 10, 2, 3
 ```
-
-- want to add group of object starting from the specified index:
+```
+want to add group of object starting from the specified index:
 boolean addAll( int index, Collection c)
 
 
@@ -139,7 +142,7 @@ Object set(int index, Object o)
 int indexOf(Object o): return the first occurance index.
 int lastIndexOf(Object o): return the last occurance index.
 ListIterator listIterator()
-
+```
 **ArrayList(c)**
 - The underlying data structure is resizable array or growable array.
 - Duplicates are allowed.
@@ -660,7 +663,67 @@ java.util.Vector$1
 java.util.Vector$Itr
 java.util.Vector$ListItr
 ```
+
+**Set(I)**
+
+- Set is child interface of Collection.
+- If we want to represent a group of individual objects as a single entity where duplicates are *not allowed* and insertion order not preserved.
+- Set interface doesn't any new method and we have to use only Collection interface methods.
    
+**HashSet(C)**
+
+1. The underlying data structure is *Hashtable*.
+2. Duplicate objects are not allowed.
+3. Insertion order is not preserved & insertion is based on hashcode of object.
+4. null insertion is possible(only once).
+5. Heterogeneous objects are allowed.
+6. Implements Serializable & Cloneable but not RandomAccess interface.
+7. HashSet is the best choice if our frequent operation is **search** operation.
+
+**Note**
+In HashSet duplicates are not allowed, if we are trying to insert the duplicates then won't get any compiletime  or runtime errors and add method simply returns false.
+
+example:
+```
+HashSet set = new HashSet();
+System.out.println(set.add("A"));//true
+System.out.println(set.add("A"));//false
+```
+
+Constructors of HashSet:
+
+```
+HashSet h =new HashSet();
+```
+It creates an empty Hashset object with the default initial capacity **16** & and the default fill ratio is **0.75**.
+
+
+```
+HashSet h = new HashSet(int initialCapacity);
+```
+Creates an empty HashSet object with the specified initial capacity & the default fill ratio is 0.75.
+
+```
+HashSet h = new HashSet(int initialCapacity, float fillRatio);
+```
+It creates an empty object with the specified initial capacity & fill ratio.
+
+```
+HashSet h = new HashSet(Collection c);
+```
+Creates an equivalent HashSet object for the given Collection object. This contructor meant for inter convertion between Collection objects.
+
+
+** fill ratio/ load factor**
+
+
+After filling how much ratio a new Hashset object will be created, this ratio is called *fill ratio/load factor*
+
+
+example: fill ratio 0.75 means after filling 75 percent ratio a *HashSet* object will be created.
+
+
+
 
   
 
