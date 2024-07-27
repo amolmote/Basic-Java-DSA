@@ -1353,6 +1353,158 @@ class TreeMapDemo {
 }
 ```
 
+**Customized Sorting of TreeMap**
+
+Example:
+```
+
+import java.util.*;
+
+class CustumizedSortingTreeMapDemo implements Comparator {
+    
+    public int compare(Object obj1, Object obj2){
+        int n1 = (int)obj1;
+        int n2 = (int)obj2;
+        if(n1< n2){
+            return +1;
+        }else if(n2 < n1){
+            return -1;
+        }else{
+           return 0;
+        }
+    }
+    
+    public static void main(String[] args)  {
+        TreeMap map = new TreeMap(new CustumizedSortingTreeMapDemo());
+        map.put(101,"amol");
+        map.put(102,"joe");
+        map.put(100,"david");
+        
+        System.out.println(map);//{102=joe, 101=amol, 100=david}
+    }
+}
+```
+
+**Hashtable**
+1. The underlying data struture for Hashtable is **Hashtable**.
+2. Insertion order is not preserved & it is based on hashcode of keys.
+3. Duplicate keys are not allowed & values can be duplicated.
+4. Heterogeneous objects are allowed for both keys & values.
+5. Null is not allowed for both key & values, otherwise we will get RuntimeException saying NullPointerException.
+6. It implements Serializable, Cloneable interfaces but not RandomAccess.
+7. Every method present in HashTable is synchronized, and hence Hashtable object is Thread safe.
+8. Hashtable is the best choice if our frequent operation is *search* operation.
+
+**Constructors**
+
+```
+Hashtable h= new Hashtable();
+Creates an empty Hashtable object with default initial capacity 11 & default fill ratio is 0.75
+
+Hashtable h= new Hashtable(int initialCapacity);
+
+
+Hashtable h = new Hashtable(int initialCapacity, float fillRatio);
+
+Hashtable h= new Hashtable(Map m);
+```
+
+Hashtable Demo code and its representation in bucket:
+bucket idx | bucket 
+-----------|-------
+10 |  
+9 | 9=joe
+8 | 
+7 | 
+6 | 
+5 | 
+4 |
+3 | 3=amol, 14=cage
+2 |
+1 |
+0 | 11=mark, 22=karolina
+
+
+**Note**: Hashtable reads data from bucket from *Top to bottom & right to left*.
+```
+
+import java.util.*;
+class HashtableDemo {
+    public static void main(String[] args)  {
+      Hashtable h = new Hashtable();
+      h.put(new Temp(3),"amol"); 3%11 = 3
+      h.put(new Temp(9), "joe");
+      h.put(new Temp(11), "mark");
+      h.put(new Temp(14), "cage");
+      h.put(new Temp(22), "karolina");
+     // h.put(new Temp(18), null);NPE
+        System.out.println(h);//{9=joe, 14=cage, 3=amol, 22=karolina, 11=mark}
+    }
+}
+class Temp{
+    int i;
+    public Temp(int i){
+        this.i = i;
+    }
+    
+    public int hashCode(){
+        return i;
+    }
+    
+    public String toString(){
+        return i +"";
+    }
+}
+```
+
+**Properties**
+1. In our program if anything changing frequently like mailId, mobile no, password, for these values not recommonded to hardcode these values in java code.
+2. Because if there is any change and to reflect that change recompilation, rebuild & redeploy application is required. Which creates a big business impact to the client.
+3. We can overcome this problem by using properties file, such type variable things we have to configure in the properties file
+4. From that properties file we have to read into java program and we can use those properties.
+5. The main advantage of this approach is if there is a change in properties file, to reflect that change just redeployment is enough which won't create any business impact to the client.
+6. We can use java Properties object to hold properties which are coming from properties file.
+7. In normal Map(Like HashMap, Hashtable, TreeMap) key and value can be any type but in the case of Properties key & value should be *String*  type only.
+
+**Constructor**
+```
+Properties p=new Properties();
+```
+
+**methods**
+```
+String getProperty(String propertyName);  //to get the value associated with propertyName
+String setProperty(String propertyName, String propertyValue);//to set new property, returns old value if key is already there
+Enumeration propertyNames();
+
+void load(InputStream is);//to load properties into java program from properties  file
+void Store(OutputStream, String comment); //to store properties into the properties file
+```
+
+Properties Demo code:
+```
+import java.util.*;
+import java.io.*;
+class PropertiesDemo {
+    public static void main(String[] args) throws Exception{
+        Properties p = new Properties();
+        FileInputStream fis = new FileInputStream("abc.properties");
+        p.load(fis);
+        System.out.println(p);
+        System.out.println(p.getProperty("username"));
+        p.setProperty("password","new_pwd");
+        FileOutputStream fos = new FileOutputStream("abc.properties");
+        p.store(fos, "pwd updated by amol");
+    }
+}
+```
+abc.properties file after update:
+```
+#pwd updated by amol
+#Sat Jul 27 19:20:51 IST 2024
+password=new_pwd
+username=amol
+```
 
 
 
