@@ -1507,7 +1507,34 @@ username=amol
 ```
 
 
+**Queue(I)**
+
+1. It is the child interface of Collection
+2. If we want to represent a group of individual objects prior to processing(email service) then we should go for Queue.
+3. For example: Before sending sms message, all mobile numbers we have to store in some data structure, In which order we added mobile numbers in the same order only message should be send. for this FIFO requirement Queue is the best choice.
+4. Usually, Queue follows FIFO order but based on our requirement we can implement our own priority order also(PriorityQueue).
+5. from 1.5 onwards **LinkedList** class also implements Queue interface also.
+6. Linkedlist based implementation always follows FIFO.
 
 
+Queue specific methods:
+```
+boolean add (Object o); To add the object in Queue.
+
+boolean offer(Object o); To add object in Queue.
+
+Object peek(); To return head element of Queue. If Queue is empty then return **null**.
+
+Object element(); To return head element of Queue.If Queue is empty then throw **NoSuchElementException**.
+
+Object poll(); To remove & return head element of Queue. If queue is empty then return **null**.
+
+Object remove(): To remove & return head element of Queue. If queue is empty then raise RE: **NoSuchElementException**.
+
+```
+
+
+
+  
 
 
