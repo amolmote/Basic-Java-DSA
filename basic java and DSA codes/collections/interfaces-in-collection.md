@@ -881,6 +881,54 @@ If default natural sorting order not available or if we are not satisfied with t
 
 
 **Customized sorting demo code- reverse order of String objects**
+
+
+**Comparator(I)**
+1. Comparator present in java.util package and it defines two methods compare() & equals()
+2. prototype of method:
+```
+public int compare(Object obj1, Object obj2)
+
+same concept like compareTo method, -ve, +ve & 0
+
+public boolean equals(Object obj)
+
+```
+**Note**: Whenever we are implementing the Comparator interface, we need to provide the implementation only for compare(), because Object class already have the implementation for equals(). and Object class is the parent class of every class in java.
+
+
+**Program**: Insert Integer objects in the TreeSet object & maintain the sorting order descending.
+
+Comparator Integer based demo code:
+```
+import java.util.*;
+class ComparatorIntDemo implements Comparator {
+    
+    public int compare(Object obj1, Object obj2){
+        int num1 = (int)obj1;
+        int num2 = (int)obj2;
+        if(num1<num2){
+            return +1;
+        }else if(num2 < num1){
+            return -1;
+        }else{
+            return 0;
+        }
+    }
+    public static void main(String[] args) {
+        TreeSet t = new TreeSet(new ComparatorIntDemo());
+          t.add(19);
+          t.add(29);=> compare(29, 19)
+          t.add(23);=> compare(23,19), 23 before 19 then compare(23,29), 23 after 29
+          t.add(77);=> compare(77, 19), 77 before 19 then compare(77, 23), 77 before the 23, compare(77, 29), 77 before the 29
+     
+          
+          System.out.println(t);//[77, 29, 23, 19] printed in inorder traversal of tree.
+    }
+}
+```
+
+Comparator String based Demo Code:
 ```
 import java.util.*;
 class MyComparator implements Comparator {
@@ -904,12 +952,180 @@ class MyComparator implements Comparator {
              set.add("B");
              set.add("Z");
              set.add("K");
-             System.out.println(set);
+             System.out.println(set);//[Z, K, B, A]
     }
 }
 ```
 
-
+Few other customization in compare();
+1. compare() always returns +1, then insertion order is followed.
+2. compare() always return -1, then it returns the reversal of insertion order.
+3. compare() always return 0, then only first element is returned.
  
   
+**Defference Between Comparable(I) & Comparator(I)**
+Comparable(I)  | Comparator(I)
+------------- | -------------
+Present in java.lang package | Present in java.util package
+Comparable meant for default natural sorting order | Comparator meant for customized sorting order
+methods present- compareTo(Object o) | methods present - compare(Object obj1, obj2), equals(Object obj)
 
+
+
+**Map(I)**
+1. Map is *not* child interface of Collection.
+2. If we want to represent a group of objects as **Key-value pairs**, then we should go for Map.
+   key  | value
+------------- | -------------
+101  | amol
+102  | Jack
+103 | Josh
+104 | Mike
+
+3. Both key and value are Objects only.
+4. Duplicate keys not allowed but value can be.
+5. Each key-value pair is called **Entry**, hence Map is considered as Collection of Entry objects.
+
+**Map specific methods:**
+```
+Object put(Object key, Object value);
+void put(Map m);
+Object get(Object key) -  get the value associated with specified key.
+Object remove(Object key) - remove the Entry associated with the specified key
+boolean containsKey(Object key)  - check if the map contains this key
+boolean containsValue(Object value) - check if the map contains this value
+boolean isEmpty() - check if Map is empty or not
+int size()
+void clear()
+```
+1.To add key-value pair in Map.
+2. If the key is already present in Map then old value will be replaced with new and it returns old value, if no replacement then put() return null.
+```
+map.put(101, "amol");//returns null
+map.put(102,"mike");//returns null
+map.put(101, "josh"); josh replaced with amol and put method returns amol.
+```
+
+
+**Collection views of Map**
+```
+Set keySet();
+Collection values();
+Set entrySet();
+```
+
+**Entry(I)**
+1. Inner interface of Map.
+2. Map is a group of a key-value pairs and each key-value pair is called an Entry, hence Map is considered as a Collection of a Entry objects.
+3. Without existing Map object there is no chance of Entry object, hence Entry interface is defined inside Map interface.
+
+
+Entry specific methods and we can only apply on Entry object.
+```
+interface Map{
+
+     interface Entry{
+       Object getKey();
+       Object getValue();
+       Object setValue(Object newValue);
+    }
+}
+```
+
+**HashMap(C)**
+
+1. The underlying data structure is Hashtable.
+2. Insertion is not preserved & insertion is based on hashcode of key.
+3. Duplicate keys are not allowed but values can be duplicated.
+4. Heterogeneous objects are allowed for both key & value.
+5. Null is allowed for key(only once)
+6. Null is allowed for values(any number of times)
+7. HashMap implements Serializable & Cloneable interfaces but not RandomAccess.
+8. HashMap is the best choice if our frequent operation is **Search**.
+
+Constructors of HashMap;
+```
+HashMap map = new HashMap();
+```
+Creates an empty Hashmap object with default initialCapacity 16 & the default fillRatio 0.75
+
+```
+HashMap m = new HashMap(int initialCapacity);
+```
+Creates an empty HashMap object with specified initialCapacity & the default fillRatio 0.75.
+
+```
+HashMap m= new HashMap(int initialCapacity, float fillRatio);
+```
+
+```
+HashMap m = new HashMap(Map m);
+```
+
+Demo Code with all concepts:
+```
+
+import java.util.*;
+
+class MapEntryMethodDemo {
+    
+    public static void main(String[] args) {
+        HashMap map = new HashMap();
+        map.put("amol", 1000);
+        map.put("josh",1200);
+        map.put("david", 3000);
+        map.put("joe", 2000);
+        System.out.println(map);//{joe=2000, amol=1000, josh=1200, david=3000}
+
+        Set set = map.keySet();
+        System.out.println(set);//[joe, amol, josh, david]
+        
+        Collection valueCollection = map.values();
+        System.out.println(valueCollection);//[2000, 1000, 1200, 3000]
+        
+        Set entry = map.entrySet();//return Map.Entry
+        
+        Iterator itr = entry.iterator();
+        /*Below are the Entry specific methods example*/
+        while(itr.hasNext()){
+            Map.Entry en = (Map.Entry)itr.next();
+            System.out.println(en.getKey()+"->"+en.getValue());
+            /*
+            joe->2000
+            amol->1000
+            josh->1200
+            david->3000
+            */
+            if(en.getKey().equals("amol")){
+                en.setValue(10000);
+            }
+        }
+        System.out.println(map);//{joe=2000, amol=10000, josh=1200, david=3000}
+        
+    }
+}`
+```
+
+**Difference Between HashMap & Hashtable** same difference as ArrayList & Vector
+
+HashMap  | Hashtable
+------------- | -------------
+ Every method present in HashMap is not synchronized | Every method present in Hashtable is synchronized.
+ At a time, multiple threads are allowed to operate on Map object, hence is not thread safe | at a time, only one thread is allowed to operate on Hashtable object & hence it is thread safe.
+ Relatively performance is high because threads are not required to wait to operate on HashMap object | relatively performance is low, because threads are required to wait to operate on Hashtable object.
+ null is allowed for both the key & value | null is not allowed for keys & values otherwise we will get NullPointerException.
+ Introduced In 1.2v, hence it is not a legacy class | Introduced in 1.0v & it is a legacy class.
+
+
+ **How to get synchronized version of HashMap object?**
+ By deault Map is non synchronized but we can get synchronized version of Map using the below method of **Collections** class.
+ 
+ ```
+HashMap m = new HashMap();
+Map m1 = Collections.synchronizedMap(m);
+m=> non synchronized.
+m1=> synchronized Map
+```
+
+
+ 
