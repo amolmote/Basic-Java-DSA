@@ -1127,5 +1127,235 @@ m=> non synchronized.
 m1=> synchronized Map
 ```
 
+**LinkedHashMap(C)**
+1.It is the child class of HashMap.
+2. It is exactly same as HashMap(incluiding methods and contructors) except the following differences:
 
- 
+HashMap | LinkedHashMap
+--------|-------------
+The underlying data structure is Hashtable | The underlying data structure is the combination of LinkedList & Hashtable(Hybrid dataStructue)
+Insertion order is not preserved and it is based on hashcode of keys | Insertion order is preserved.
+Introduced in 1.2v | Introduced in 1.4 v
+
+In the above HashMap program, if we replace HashMap with LinkedHashMap then the output is:
+```
+{amol=1000, josh=1200, david=3000, joe=2000}
+```
+i.t insertion order is preserved.
+
+**Note**: LinkedHashSet & LinkedHashMap are commonly used for developing *Cache Based Applications* as it doesn't allow duplicates and preserves the insertion order.
+
+
+**Difference Between "==" operator and equals()** important to understand the difference between HashMap &IdentityHashMap
+
+In general, == operator meant for reference comparison (address comparison) where as equals() meant for content comparison.
+example:
+```
+Integer I1 = new Integer(30);
+Integer I2 = new Integer(30);
+sop(I1==I2)//false
+sop(I1.equals(I2));//false
+```
+
+**IdentityHashMap(C)**
+1. It is exactly same as HashMap(including methods & constructors except the following difference.
+2. In case of Normal HashMap , jvm will use equals() method to identify duplicates key which is meant for content comparison.
+3. But in the case of IdentityHashMap, jvm will use == operator to identify duplicate keys which is meant for reference comparison(address comparison).
+
+
+Demo code:
+ ```
+import java.util.*;
+
+class HashMapEqualsMethodUseDemo {
+    
+    public static void main(String[] args) {
+        HashMap map = new HashMap();
+        Integer i1 = new Integer(10);
+        Integer i2 = new Integer(10);
+        map.put(i1, "amol");
+        map.put(i2, "josh"); //internally, HashMap uses equals() to compare the keys
+        System.out.println(map);//{10=josh}
+       
+    }
+}
+
+/*IdentityHashMap demo Example
+
+import java.util.*;
+
+class IdentityHashMapDemo {
+    
+    public static void main(String[] args) {
+        IdentityHashMap map = new IdentityHashMap();
+        Integer i1 = new Integer(10);
+        Integer i2 = new Integer(10);
+        map.put(i1, "amol");
+        map.put(i2, "josh");//IdentityHashMap uses == operator for key comparison
+        System.out.println(map);//{10=josh, 10=amol}
+       
+    }
+}
+```
+
+
+**WeakHashMap(C)**
+
+1. It is exactly same as HashMap except, the following difference
+2. In case of HashMap even though object(key) doesn't have any reference it is not eligible for gc if it is associated with HashMap that is HashMap dominates garbage collector.
+3. But In case WeakHashMap, if object doesn't contain any referance then it is eligible for gc even though object associated WeakHashMap. i.e. garbage collector dominates WeakHashMap.
+
+Domination of HashMap over garbage collector Example code:
+```
+
+import java.util.*;
+
+class DominationOfHashmap {
+    
+    public static void main(String[] args) throws InterruptedException {
+        HashMap map = new HashMap();
+        Temp t = new Temp();
+        map.put(t, "amol");
+        System.out.println(map);//{temp=amol}
+        t = null;
+        System.gc();
+        Thread.sleep(4000);
+        System.out.println(map);//{temp=amol}
+    }
+}
+class Temp{
+        
+        public String toString(){
+            return "temp";
+        }
+        public void finalize(){
+            System.out.println("finalize() invoked by gc");
+        }
+}
+```
+
+Domination of garbage collector over WeakHashMap code:
+```
+
+import java.util.*;
+
+class DominationOfGarbageCollector {
+    
+    public static void main(String[] args) throws InterruptedException {
+        WeakHashMap map = new WeakHashMap();
+        Temp t = new Temp();
+        map.put(t, "amol");
+        System.out.println(map);
+        t = null;
+        System.gc();
+        Thread.sleep(4000);
+        System.out.println(map);
+    }
+}
+class Temp{
+        
+        public String toString(){
+            return "temp";
+        }
+        public void finalize(){
+            System.out.println("finalize() invoked by gc");
+        }
+}
+```
+Output:
+```
+{temp=amol}
+finalize() invoked by gc
+{}
+```
+
+**SortedMap(I)**
+1. it is the child interface of Map.
+2. If we want to represent a group of key-value pair according to some sorting order of keys then we should go for SortedMap.
+3. Sorting is based on the Key but not based on the value.
+4. SortedMap defines the following specific methods:
+
+```
+Object firstKey();
+Object lastKey();
+SortedMap headMap(Object key); => return entries less  than specified key
+SortedMap tailMap(Object key); => returns entries whose key is greater & equal to the specified key
+SortedMap subMap(Object key1, Object key2); => returns the entries whose keys are greater and equal to key1 & less than key2
+Comparator comparator();
+```
+
+Demo code for above methods:
+```
+
+import java.util.*;
+
+class SortedMapMethodsDemo {
+    
+    public static void main(String[] args)  {
+        TreeMap map = new TreeMap();
+        map.put(101,"amol");
+        map.put(103, "josh");
+        map.put(104,"joe");
+        map.put(106, "dan");
+        map.put(109, "mark");
+        System.out.println(map);///{101=amol, 103=josh, 104=joe, 106=dan, 109=mark}
+        System.out.println(map.firstKey());//101
+        System.out.println(map.lastKey());//109
+        System.out.println(map.headMap(106));//{101=amol, 103=josh, 104=joe}
+        System.out.println(map.tailMap(104));//{104=joe, 106=dan, 109=mark}
+        System.out.println(map.subMap(103, 109));//{103=josh, 104=joe, 106=dan}
+        System.out.println(map.comparator());//null => because of natural sorting order
+    }
+}
+```
+
+**TreeMap(C)**
+1. The underlying data structure is Red-Black tree.
+2. Insertion order is not preserved & it is based on some sorting order of keys.
+3. Duplicate keys are not allowed but values can be duplicated.
+4. If we are depending on the natural sorting order then keys should be homogeneous and Comparable, otherwise we will get RuntimeException saying ClassCastException.
+5. If we are defining our own customized sorting order then the keys need not be homogeneous & Comparable, then we can take keys heterogeneous & non comparable also.
+6. Whether we are depending on default natural sorting or customized sorting order there are no restriction for values, we can take heterogeneous & non comparable objects also.
+
+
+1. For non empty TreeMap if we are trying to insert entry with null key then we will get RuntimeException saying NullPointer Exception.
+2. For empty TreeMap, as the first entry with null key is allowed nut after inserting that entry if we are trying insert any other entry then we will get NullPointerException.
+
+**Note**: The above null acceptance rule applicable until 1.6v only, from 1.7v onwards null is not allowed for key. for value we can use null any number of times.
+
+**Constructors**
+```
+TreeMap map=  new TreeMap(); => for default natural sorting order 
+
+TreeMap map=new TreeMap(Comparator c);=> for customized sorting order
+
+TreeMap map=new TreeMap(Map m);=> equivalent to specified map object
+
+TreeMap map=new TreeMap(SortedMap s);  => equivalent to specified SortedMap object, follows sorting order of s.
+```
+
+TreeMap Demo Code:
+```
+
+import java.util.*;
+
+class TreeMapDemo {
+    
+    public static void main(String[] args)  {
+        TreeMap map = new TreeMap();
+        map.put(101,"amol");
+        map.put(102,"joe");
+        map.put(100,"david");
+        //map.put("abc", "killer");//ClassCastException
+        //map.put(null, "josh");//NullPointerException
+        System.out.println(map);//{100=david, 101=amol, 102=joe}
+    }
+}
+```
+
+
+
+
+
+
+
