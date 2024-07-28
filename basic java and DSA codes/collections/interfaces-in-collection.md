@@ -1533,8 +1533,247 @@ Object remove(): To remove & return head element of Queue. If queue is empty the
 
 ```
 
+**PriorityQueue**
+1. If we want to represent a group of individual objects prior to processing according to some priority then we should go for *PriorityQueue*.
+2. The Priority can be either default natural sorting order or customized sorting order defined by Comparator.
+3. Insertion order is not preserved and it is based on some priority.
+4. Duplicate objects are not allowed.
+5. If we are depending on default natural sorting order, compulsory the objects should be Homogeneous & Comparable. Otherwise we will get RE saying ClassCastException.
+6. If we are defining our own sorting by Comparator then objects need not be homogeneous & comparable.
+7. null is not allowed even as the first element also.
 
 
+**Constructors**
+```
+PriorityQueue queue = new PriorityQueue();
+```
+Creates an empty PriorityQueue with default initialCapacity 11, and all objects will be inserted according to default natural sorting order.
+```
+PriorityQueue q = new PriorityQueue(int initialCapacity);
+
+PriorityQueue q = new PriorityQueue(int initialCapacity, Comparator c);
+
+PriorityQueue q = new PriorityQueue(SortedSet s);
+
+PriorityQueue q = new PriorityQueue(Collection c);
+```
+
+
+PriorityQueue Demo Code:
+Note: Some platforms won't provide proper support for thread priorities & PriorityQueues.
+
+```
+
+import java.util.*;
+
+class PriorityQueueDemo {
+    public static void main(String[] args) {
+         PriorityQueue queue = new PriorityQueue();
+         System.out.println(queue.peek());//null
+         System.out.println(queue.poll());//null
+         //System.out.println(queue.remove());//NoSuchElementException
+         
+         for(int i=0;i<=10;i++){
+             queue.offer(i);
+         }
+         System.out.println(queue);//[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+         System.out.println(queue.poll());//0
+         
+         System.out.println(queue);//[1, 3, 2, 7, 4, 5, 6, 10, 8, 9] Note: Some platforms won't provide proper support for thread priorities & PriorityQueues.
+    }
+}
+```
+
+PriorityQueue with Comparator Demo Code:
+```
+
+import java.util.*;
+
+class PriorityQueueComparator implements Comparator {
+    
+    public int compare(Object obj1, Object obj2){
+        String s1= (String) obj1;
+        String s2=(String) obj2;
+        return s2.compareTo(s1);//reverse or -s1.compareTo(s2)
+    }
+    public static void main(String[] args) {
+         PriorityQueue queue = new PriorityQueue(14, new PriorityQueueComparator());
+         queue.add("joe");
+         queue.add("dan");
+         queue.add("karolina");
+         queue.add("amol");
+         queue.add("hoaran");
+         System.out.println(queue);//[karolina, hoaran, joe, amol, dan]
+    }
+}
+```
   
+**1.6v Enhancements in Collection framework**
+As a part of 1.6v, the following two concepts introduced in Collection framework
 
 
+1. NavigableSet
+2. NavigableMap
+
+**NavigableSet**
+1. It is the child interface of SortedSet & it defines several methods for Navigation purposes(flight timing example).
+2. NavigablSet defines the following methods:
+
+```
+floor(e); - it return higest element which is <= e
+
+lower(e); - it returns highest element which is < e
+
+ceiling(e) - It returns lowest element which is >= e
+
+higher(e); - It returns lowest element which is > e
+
+pollFirst(); - remove & returns first element.
+
+pollLast(); - remove & return last element.
+
+descendingSet(); It returns NavigableSet in reverse order.
+
+```
+
+Demo code for NavigableSet methods:
+```
+import java.util.*;
+
+class NavigableSetMethodsDemo {
+    public static void main(String[] args) {
+        TreeSet<Integer> set = new TreeSet();
+        set.add(1);
+        set.add(9);
+        set.add(4);
+        set.add(2);
+        set.add(8);
+        set.add(6);
+        
+        System.out.println(set);//[1, 2, 4, 6, 8, 9]
+        System.out.println(set.floor(6));//6
+        System.out.println(set.lower(6));//4
+        System.out.println(set.floor(5));//4
+        
+        System.out.println(set.ceiling(2));//2
+        System.out.println(set.higher(2));//4
+        
+        System.out.println(set.pollFirst());//1
+        System.out.println(set.pollLast());//9
+        System.out.println(set.descendingSet());//[8, 6, 4, 2]
+        System.out.println(set);//[2, 4, 6, 8]
+    }
+}
+```
+
+**NavigableMap(I)**
+1. It is the child interface of SortedMap.
+2. It defines several methods for Navigation purposes.
+3. Methods are below:
+
+```
+floorKey(e);
+lowerKey(e);
+ceilingKey(e);
+higherKey(e);
+pollFirstEntry();
+pollLastEntry();
+descendingMap();
+```
+
+NavigableMap methods Demo Code:
+```
+import java.util.*;
+
+class NavigableMapMethodsDemo {
+    public static void main(String[] args) {
+        TreeMap<Integer, String> map= new TreeMap();
+        map.put(1, "joe");
+        map.put(2,"Dan");
+        map.put(8, "jack");
+        map.put(6, "mark");
+        
+        System.out.println(map);//{1=joe, 2=Dan, 6=mark, 8=jack}
+        System.out.println(map.floorKey(8));//8
+        System.out.println(map.lowerKey(8));//6
+        System.out.println(map.floorKey(7));//6
+        
+        System.out.println(map.ceilingKey(2));//2
+        System.out.println(map.higherKey(2));//6
+        
+        System.out.println(map.pollFirstEntry());//1=joe
+        System.out.println(map.pollLastEntry());//8=jack
+        System.out.println(map.descendingMap());//{6=mark, 2=Dan}
+        System.out.println(map);//{2=Dan, 6=mark}
+        
+    }
+}
+```
+
+**Collections(C)**
+
+1. Collections class defines several utility methods for Collection objects like sorting, searching, reversing etc.
+2. Collections class defines the following two sort methods:
+
+```
+a) public static void sort(List l); => To sort based on default natural sorting order, In this case List should compulsory contains homogeneous & comparable objects otherwise we will get RE sying ClassCastException.
+
+Also, List should not contain null, otherwise we will get NullPointerException(because of comparison with null is not possible).
+
+b) public static void sort(List l, Comparator c) => To sort based on Customized sorting order.
+
+```
+
+
+Natural sorting example of ArrayList
+```
+import java.util.*;
+
+class CollectionsSortMethod {
+    public static void main(String[] args) {
+        ArrayList list = new ArrayList();
+        list.add(23);
+        list.add(4);
+        list.add(27);
+        list.add(16);
+        list.add(1);
+        //list.add("String ele");//ClassCastException
+        //list.add(null);//NullPointerException
+        
+        System.out.println(list);//[23, 4, 27, 16, 1]
+        Collections.sort(list);
+        System.out.println(list);//[1, 4, 16, 23, 27]
+    }
+}
+```
+Customized sorting example of ArrayList
+```
+import java.util.*;
+
+class CollectionsSortMethod implements Comparator{
+    
+    public int compare(Object obj1, Object obj2){
+        int n1 = (int)obj1;
+        int n2 = (int)obj2;
+        if(n1<n2){
+        return +1;    
+        }else if(n1> n2){
+            return -1;
+        }else{
+            return 0;
+        }    
+    }
+    public static void main(String[] args) {
+        ArrayList list = new ArrayList();
+        list.add(23);
+        list.add(4);
+        list.add(27);
+        list.add(16);
+        list.add(1);
+    
+        System.out.println(list);//[23, 4, 27, 16, 1]
+        Collections.sort(list, new CollectionsSortMethod());
+        System.out.println(list);//[27, 23, 16, 4, 1]
+    }
+}
+```
