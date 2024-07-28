@@ -1777,3 +1777,11 @@ class CollectionsSortMethod implements Comparator{
     }
 }
 ```
+
+**Searching element in List**
+Collections class defines the following binary search methods
+```
+a) public static int binarySearch(List l, Object target);
+If the list is sorted according to default natural sorting order then we have to use this method.
+
+b) public static int binarySearch(List l, Object target, 
