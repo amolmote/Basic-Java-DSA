@@ -1784,4 +1784,117 @@ Collections class defines the following binary search methods
 a) public static int binarySearch(List l, Object target);
 If the list is sorted according to default natural sorting order then we have to use this method.
 
-b) public static int binarySearch(List l, Object target, 
+b) public static int binarySearch(List l, Object target, Comparator c);
+If the list is sorted according to the customized sorting order.
+
+```
+**Conclusions**
+1. The above search methods internally will use binary search algorithm.
+2. Successful search returns index of element.
+3. Unsuccessful search returns insertion point.
+4. Insertion point is the location where we can place target element in sorted list.
+5. Before calling binarySearch() compulsory list should be *sorted* otherwise we will get unpredicatable results.
+6. If the list is sorted according to Comparator, then at the time of search operation also we have to pass same comparator object otherwise we will get unpredicatable results.
+
+Default Natural Sorting order *binarySearch()* demo code;
+```
+import java.util.*;
+
+class BinarySearchMethod1 {
+    public static void main(String[] args) {
+        ArrayList list = new ArrayList();
+        list.add(1);
+        list.add(3);
+        list.add(2);
+        list.add(4);
+        
+        Collections.sort(list);
+        System.out.println(list);//[1, 2, 3, 4]
+        System.out.println(Collections.binarySearch(list, 2));//1
+        System.out.println(Collections.binarySearch(list, 0));//-1
+        System.out.println(Collections.binarySearch(list, 6));//-5
+        System.out.println(Collections.binarySearch(list, 5));//-5
+    }
+}
+```
+Customized Sorting order *binarySearch()* Demo:
+```
+
+import java.util.*;
+
+class BinarySearchMethod1 implements Comparator{
+    public int compare(Object obj1, Object obj2){
+        int n1 = (int)obj1;
+        int n2 = (int)obj2;
+        if(n1<n2){
+            return +1;
+        }else if(n1>n2){
+            return -1;
+        }else{
+            return 0;
+        }
+    }
+    public static void main(String[] args) {
+        ArrayList list = new ArrayList();
+        list.add(1);
+        list.add(3);
+        list.add(2);
+        list.add(4);
+        
+        Collections.sort(list, new BinarySearchMethod1());
+        System.out.println(list);//[1, 2, 3, 4]
+        System.out.println(Collections.binarySearch(list, 2, new BinarySearchMethod1()));//2
+        System.out.println(Collections.binarySearch(list, 0, new BinarySearchMethod1()));//-5
+        System.out.println(Collections.binarySearch(list, 6, new BinarySearchMethod1()));//-1
+        System.out.println(Collections.binarySearch(list, 4));//unpredictable as we are not passing Comparator object
+    }
+}
+```
+
+For the list of n elements, In the case of binarySearch():
+1. Successful search result range: 0 to (n-1)
+2. Unsuccessful search result range: -(n+1) to -1
+3. Total result range: -(n+1) to (n-1)
+
+**Reverse List**
+Collections class defines the following reverse method to reverse elements of List.
+
+```
+public static void reverse(List l);
+```
+Demo Code:
+```
+import java.util.*;
+
+class ReverseMethodDemo {
+    public static void main(String[] args) {
+        ArrayList list = new ArrayList();
+        list.add(23);
+        list.add(13);
+        list.add(null);
+        list.add(3);
+        list.add(14);
+        list.add(29);
+        
+        System.out.println(list);//[23, 13, null, 3, 14, 29]
+        Collections.reverse(list);
+        System.out.println(list);//[29, 14, 3, null, 13, 23]
+    }
+}
+```
+
+**reverse() vs reverseOrder**
+1. We can use reverse() to reverse order of elements of List.
+2. Whereas we can reverseOrder() to get reversed Comparator.
+
+```
+Comparator c1 = Collections.reverseOrder(Comparator c);
+
+where,
+ if c is ascending order Comparator
+then c1 is descending order Comparator which is returned by reverseOrder() method.
+```
+
+**Arrays(C)**
+1.Arrays class is an utility class to define several utility methods for Array objects.
+
