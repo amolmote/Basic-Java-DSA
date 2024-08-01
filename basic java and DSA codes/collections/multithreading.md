@@ -66,10 +66,120 @@ public class ThreadDemo {
 ```
 
 **Case 1: Thread Scheduler**
-1.It is the part of JVM
+
+1. It is the part of JVM
 2. It is responsible to schedule thread, because if multiple threads are waiting to get chance of execution, then in which order threads will be executed is decided by thread scheduler.
 3. We can't expect exact algorithm followed by scheduler, it is varies from JVM to JVM, hence we can't expect the order of thread execution.
 4. Hence whenever situation comes in multithreading there is no guarrenty of exact output, but we can provide several possible outputs.
+
+The following are possible outputs for the above program.
+1. main thread followed by child thread.
+2. child thread followed by main thread.
+3. mixed output of main & child thread.
+
+
+**Case 2: Difference between t.start() & t.run()**
+
+t.start()  | t.run()
+------------- | -------------
+In this case, a new thread will be created which is responsible for the execution of run() | In this case, a new thread won't be created & the run() method will be executed just like a normal method call by *main thread*
+
+**Case 3: Importance of Thread class start()**
+1. Thread class start() is responsible for to register the thread with thread scheduler & all other mandatory activities.
+2. hence, without executing Thread class start method, there is no chance of executing new thread in java.
+3. due to this Thread class start() is considered as heart of multithreading.
+
+```
+start(){
+
+//1. Register the thread.
+//2. Perform all other mandatory activities.
+//3. Invoke run()
+}
+```
+
+**Case 4: overloading of run()**
+
+1. overloading of run() is always possible, but Thread class start() can invoke *no-args run()*.
+2. The other overloaded run() method we have to call explicitly like a normal method call.
+
+demo code:
+```
+
+class MyThread extends Thread{
+    public void run(){
+        System.out.println("no arg method");
+    }
+    public void run(int a){
+        System.out.println("overloaded method "+a);
+    }
+}
+public class OverloadingOfRun {
+    public static void main(String[] args) {
+        MyThread t = new MyThread();
+        t.start();
+        t.run(10);
+    }
+}
+```
+Output:
+```
+no arg method
+overloaded method 10
+```
+
+**case 5: not overriding run()**
+
+1. If we are not overriding run() then the Thread class run() will be executed which has empty implementation.
+2. Hence we will not get any output.
+
+
+```
+class MyThread extends Thread{
+   
+}
+public class NoOverridingOfRun {
+    public static void main(String[] args) {
+        MyThread t = new MyThread();
+        t.start();
+    }
+}
+```
+**Note**: It is highly recommonded to override run() otherwise don't go for multithreading concept.
+
+**Case 6: overriding of start()**
+1. If we override the start() then our start() will be executed, just like a normal method call.
+2. new thread won't be created.
+
+Demo code:
+
+```
+
+class MyThread extends Thread{
+   public void start(){
+       System.out.println("start method called..");
+   }
+   public void run(){
+       System.out.println("run method called..");
+   }
+}
+public class StartMethodInClass {
+    public static void main(String[] args) {
+        MyThread t = new MyThread();
+        t.start();
+        
+        System.out.println("main thread finished...");
+    }
+}
+```
+output:
+```
+start method called..
+main thread finished...
+```
+
+
+
 
 
    
