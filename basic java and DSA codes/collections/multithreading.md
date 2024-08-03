@@ -179,6 +179,53 @@ main thread finished...
 ```
 
 
+Note: It is not recommonded to override the start() otherwise don't go for multithreading concept.
+
+**Case 7**
+Demo2: for above just one change calling super.start()
+run code and check different results.
+```
+class StartMethodDemo2 extends Thread {
+    
+    public void start(){
+        super.start();
+        System.out.println("start method..");
+    }
+    
+    public void run(){
+        System.out.println("run method");
+    }
+    public static void main(String[] args) {
+        StartMethodDemo2 t = new StartMethodDemo2();
+        t.start();
+        System.out.println("main method...");
+    }
+}
+```
+
+### Thread Lifecycle ###
+
+
+![image](https://github.com/user-attachments/assets/534f71c5-afd1-44eb-9a86-fd0f25593158)
+
+
+
+**case 8 - IllegalThreadStateException**
+After starting a thread if we are trying to restart the same thread then we will get this RuntimeException.
+
+```
+ MyThread t = new MyThread();
+        t.start();
+        t.start(); //RE:IllegalThreadStateException
+```
+
+
+
+
+
+
+
+
 
 
 
