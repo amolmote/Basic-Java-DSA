@@ -221,10 +221,66 @@ After starting a thread if we are trying to restart the same thread then we will
 
 
 
+### Defining a Thread Using Runnable interface ###
+
+We can define a thread by implementing Runnable interface. 
+1. Runnable interface present in java.lang package.
+2. It contains only one method: run()
+
+![image](https://github.com/user-attachments/assets/65b1b256-8978-4901-8c5d-0c43bbe167e2)
+
+
+```
+
+class RunnableDemo implements Runnable  {
+    //Defining Thread
+    public void run(){
+        System.out.println("child thread...");//child thread job
+    }
+    
+    public static void main(String[] args) {
+     RunnableDemo r = new RunnableDemo();
+     Thread t = new Thread(r);//target thread-r
+     t.start();
+     System.out.println("main thread...");
+    }
+}
+```
+
+
+**case study**
+
+```
+MyRunnable r = new MyRunnable();
+Thread t1=new Thread();
+Thread t2=new Thread(r);
+```
+**case 1: t1.start()**
+1. A new thread will be created and which is responsible for the execution of thread class run(), which has empty implementation 
+
+**case 2: t1.run()**
+No New thread will be created and Thread class run() will be executed just like a normal method call.
+
+**case 3: t2.start()**
+A new thread will be created which is responsible for the execution of MyRunnable run().
+
+**case 4: t2.run()**
+A new thread won't be created and MyRunnable run() will be executed just like a normal method call.
+
+**case 5: r.start()**
+We will get compile time error saying *MyRunnable class doesn't have start capability*. "can not find symbol symbol: method start
+
+**case 6: r.run()**
+No new thread won't be created and MyRunnable run() will be executed just like normal method calls.
 
 
 
+### Which approach is best to define Thread ###
+1. Among two ways of defining a Thread, implements Runnable appoach is recommonded.
+2. In first approach our class Always extends Thread class, there is no chance of extending any other class hence we are missing inheretance benefit.
+3. But in second approach, while implement Runnable interface we can extend any other class, hence we won't miss inheretance benefits.
 
+Due to above reason creating thread using Runnable interface is recommonded.
 
 
 
