@@ -444,6 +444,16 @@ class MainChildDemo extends Thread{
 **Note**: Some platforms won't provide proper support for thread priorities.
 
 
+### Thread Prevention Methods ###
+We can prevent a thread execution by using the following methods:
+1. yield()
+2. join()
+3. sleep()
+
+**yield()**5
+
+
+
 
 
 
