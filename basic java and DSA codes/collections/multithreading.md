@@ -505,10 +505,16 @@ venu fixing thread(t1)    wedding card printing(t2)   wedding card distribution(
   t1 executes first then t2 and at last t3.
 
 ```
-public final void join()
-public final void join(long ms)
-public final void join(long ms, int ns)
+public final void join() throws InterruptedException
+public final void join(long ms) throws InterruptedException
+public final void join(long ms, int ns) throws InterruptedException
 ```
+
+**Note** Every join method throws InterruptedException which is checked exception hence, compulsory we should handle this exception either by using try-catch or by throws keyword. otherwise we will get compile time error.
+
+
+
+![image](https://github.com/user-attachments/assets/e4a57bee-ad9d-4ca9-af8f-244230d64432)
 
 
 
