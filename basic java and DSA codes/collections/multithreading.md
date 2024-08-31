@@ -517,6 +517,38 @@ public final void join(long ms, int ns) throws InterruptedException
 ![image](https://github.com/user-attachments/assets/e4a57bee-ad9d-4ca9-af8f-244230d64432)
 
 
+If thread scheduler allocates processor then only the thread will enter into running state.
+
+
+
+```
+
+class JoinDemo extends Thread {
+    
+    public void run() {
+        for(int i=0;i<6;i++){
+            try{
+                Thread.sleep(1000);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
+            
+            System.out.println(Thread.currentThread().getName());
+        }
+    }
+    public static void main(String[] args) throws InterruptedException{
+        JoinDemo t = new JoinDemo();
+        t.start();
+        //t.join();//main will wait until t thread
+        t.join(2000);//main will wait till 2 sec
+        for(int i=0;i<6;i++){
+            System.out.println(Thread.currentThread().getName());
+        }
+    }
+}
+```
+
+
 
 
 
