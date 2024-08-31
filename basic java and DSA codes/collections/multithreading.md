@@ -450,9 +450,65 @@ We can prevent a thread execution by using the following methods:
 2. join()
 3. sleep()
 
-**yield()**5
+### yield()  ###
+1. Yield method causes to pause current executing thread to give the chance for waiting thread of same priority.
+2. If there is no waiting thread or all waiting threads have low priority then, same thread can continue its execution.
+3. If multiple threads are waiting with the same priority then which waiting thread will get the chance, we can't expect it depends on thread scheduler.
+4. the thread which is yielded, when it will get the chance again it depends on thread scheduler and we can't expect exactly.
+
+```
+public static native void yield()
+```
+
+...
+```
+class YieldDemo extends Thread {
+    
+    public void run(){
+        for(int i=0;i<4;i++){
+           System.out.println("child thread..");
+           Thread.yield(); // ...1
+       }
+    }
+    public static void main(String[] args) {
+       YieldDemo t1 = new YieldDemo();
+        
+       t1.start();
+       
+       for(int i=0;i<4;i++){
+           System.out.println("main thread..");
+       }
+    }
+}
+```
+In the above program, if we are commenting line 1 then both the threads will be executed simultaneously and we can't except which thread will complete first. If we are not commenting line 1 then child thread will always call yield() then main thread will get chance more number of times and the chance of completing main thread first is high.
 
 
+
+Some platforms won't provide proper support for yield method.
+
+
+### join() ###
+
+If a thread wants to wait until completing some other thread then we should go for go join method.
+
+for eg. if t1 wants to wait until completing of t2 then  t1 has to call t2.join().
+
+
+If t1 execute t2.join() then immediately t1 will be entered into waiting state until t2 completes. once t2 completes then t1 can continue its execution.
+
+
+
+venu fixing thread(t1)    wedding card printing(t2)   wedding card distribution(t3)
+                                t1.join()                       t2.join()
+
+  t1 executes first then t2 and at last t3.
+
+```
+public final void join()
+public final void join(long ms)
+public final void join(long ms, int ns)
+```
 
 
 
