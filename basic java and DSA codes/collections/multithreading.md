@@ -749,8 +749,33 @@ is it static? | yes | no | yes |
 
 
 
+## Thread Synchronization ##
    
+1. synchronized is the modifier applicable only for methods and blocks but not for classes and variables.
+2. If multiple threads are trying to operate on the same java object then there may be a chance of data inconsistency problem.
+3. To overcome this problem we should go for synchronzed keyword.
+4. If a method or block declared as a synchronized, then at a time only one thread is allowed to execute that method or block on the given object, so that data inconsistency problem will be resolved.
+5. The main advantage of synchronized keyword is we can resolve data inconsistency problems but the main disadvantage of synchronzed keyword is, it increases waiting time of threads and creates performance problems, hence if there is no specific required then it is not recommonded to use synchronized keyword.
+6. Internally synchronization concept is implemented by using lock. Every object in java has a unique lock. Wheneever we are using synchronized keyword then only lock concept will come into the picture.
+7. If a thread wants to execute synchronized method on the given object first it has to get lock of that object. Once thread got the lock then it is allowed to execute any synchronized on that object. Once method execution completes automatically thread releases the lock. aquiring and releasing lock internally takes care by JVM and programmer not responsible for this activity.
+8. While a thread executing synchronized method on the given object the remaining threads are not allowed to execute any synchronzed method simultaneously on the same object, remaining threads are allowed to execute non synchronized methods simultaneously.
+9. Lock concept is implemented based on *object* but not based on method.
 
+
+
+![image](https://github.com/user-attachments/assets/aea47b7a-10d5-4080-9c0f-826856579ac7)
+
+
+
+
+
+
+
+
+
+
+
+ 
 
 
 
