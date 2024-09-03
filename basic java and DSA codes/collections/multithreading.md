@@ -783,6 +783,28 @@ The area in which we perform read operations only i.e where state of object won'
 
 
 
+example code structure:
+
+```
+class MovieSeatBooking{
+
+        seatAvailability(){
+            // non synchronized method - read operation only
+         }
+
+         synchronized void bookTicket(){
+           // update operation
+         }
+
+}
+
+```
+
+
+
+
+
+
 
    
 
