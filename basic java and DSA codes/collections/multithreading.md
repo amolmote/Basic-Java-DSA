@@ -767,9 +767,24 @@ is it static? | yes | no | yes |
 
 
 
+### Areas of Object in java ###
+
+![image](https://github.com/user-attachments/assets/fff28736-c586-45aa-ac78-d34955de13b6)
 
 
 
+Synchronized area:
+The area in which we perform update operation, i.e. where the state of object changing.
+
+
+
+Non-synchronzed area:
+The area in which we perform read operations only i.e where state of object won't be changing.
+
+
+
+
+   
 
 
 
