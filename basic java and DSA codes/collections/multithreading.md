@@ -1035,6 +1035,7 @@ public class MyThread extends Thread {
 - If mutltiple thread are operating on same java object then there may be a chance of data inconsistancy problem this is called race condition, we can overcome this problem by using synchronization.
 - what is object lock and when it is required? whenever a thread want to execute synchronized method then it is required. example: method called using same java object.
 - what is class lock and when it is required=> Whenever a thread want to execute static synchronzed method then it is required. example method called using different java object.
+  
 
 
 
