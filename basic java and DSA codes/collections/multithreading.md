@@ -799,8 +799,162 @@ class MovieSeatBooking{
 }
 
 ```
+### Object level lock example ###
+```
+
+class Display{
+    
+    public synchronized void greet(String name){
+       
+        for(int i=0;i<6;i++){
+            System.out.print("hello: ");
+            try{
+             Thread.sleep(2000);    
+           }catch(InterruptedException e){
+            System.out.println(e);
+          }
+           System.out.println(name);
+        }
+    }
+}
+
+public class MyThread extends Thread {
+    Display d;
+    String name;
+    
+    public MyThread(Display d, String name){
+        this.d = d;
+        this.name = name;
+    }
+    
+    public void run(){
+       d.greet(name);
+    }
+    public static void main(String[] args) {
+        Display d= new Display();
+        MyThread t1=new MyThread(d,"amol");
+        MyThread t2=new MyThread(d,"ajay");
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+### Case Study ###
+```
+Display d1 = new Display();
+Display d2 = new Display();
+MyThread t1= new MyThread(d1, "ajay");
+MyThread t2 = nw MyThread(d2, "raj");
+
+t1.start();
+t2.start();
+```
+Even though the method is synchronized, in above case we will get irregular output. because threads are operating on different java objects.
+
+demo code of this use case:
+
+```
+
+class Display{
+    
+    public synchronized void greet(String name){
+       
+        for(int i=0;i<6;i++){
+            System.out.print("hello: ");
+            try{
+             Thread.sleep(2000);    
+           }catch(InterruptedException e){
+            System.out.println(e);
+          }
+           System.out.println(name);
+        }
+    }
+}
+
+public class MyThread extends Thread {
+    Display d;
+    String name;
+    
+    public MyThread(Display d, String name){
+        this.d = d;
+        this.name = name;
+    }
+    
+    public void run(){
+       d.greet(name);
+    }
+    public static void main(String[] args) {
+        Display d1= new Display();
+        Display d2= new Display();
+        MyThread t1=new MyThread(d1,"amol");
+        MyThread t2=new MyThread(d2,"ajay");
+        t1.start();
+        t2.start();
+    }
+}
+```
 
 
+### Conclusion ###
+- If multiple threads are operating on same java object then synchronization is required.
+- If multiple threads are operating on different java objects then synchronization is not required.
+
+
+### Class Level Lock ###
+- Every class in java has a unique lock, which is nothing but class level lock.
+- If a thread wants to execute a static synchronized method then thread required class level lock. once thread got class level lock then it is allowed to execute any static synchronized method of that class.
+- once method execetion completes, automatically thread releases the lock.
+
+Demo code for class level lock:
+```
+
+class Display{
+    
+    public synchronized void greet(String name){
+       
+        for(int i=0;i<6;i++){
+            System.out.print("hello: ");
+            try{
+             Thread.sleep(2000);    
+           }catch(InterruptedException e){
+            System.out.println(e);
+          }
+           System.out.println(name);
+        }
+    }
+}
+
+public class MyThread extends Thread {
+    Display d;
+    String name;
+    
+    public MyThread(Display d, String name){
+        this.d = d;
+        this.name = name;
+    }
+    
+    public void run(){
+       d.greet(name);
+    }
+    public static void main(String[] args) {
+        Display d1= new Display();
+        Display d2= new Display();
+        MyThread t1=new MyThread(d1,"amol");
+        MyThread t2=new MyThread(d2,"ajay");
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+- While a thread executing static synchronized method, then the remaining threads are not allowed to execute any static synchronized of that class simultaneously.
+- But remaining threads are allowed to execute the following methods simultaneously
+1. Normal static methods.
+2. synchronized instance methods.
+3. normal instance methods.
+
+   
 
 
 
