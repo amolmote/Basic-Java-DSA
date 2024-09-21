@@ -955,6 +955,8 @@ public class MyThread extends Thread {
 3. normal instance methods.
 
    
+## Synchronized block ##
+
 
 
 
