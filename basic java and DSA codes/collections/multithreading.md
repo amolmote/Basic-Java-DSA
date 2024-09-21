@@ -957,6 +957,88 @@ public class MyThread extends Thread {
    
 ## Synchronized block ##
 
+- If very few line of the code required synchronization then it is not recommonded to declare entire method as synchronized, we have to enclose those few lines of the code by using synchronized block.
+- The advantage of synchronized block over synchronized method is it reduces waiting time of threads and improves performance of the system.
+- We can declare synchronized block as follows:
+1. To get lock of current object
+```
+synchronized(this){
+// if the thread get the lock of current class object then only it is allowed to execute this area
+}
+```
+2. To get lock of particular object
+```
+synchronized(b){
+// if the thread get the lock of 'b' object then only it is allowed to execute this area
+}
+```
+3. To get the lock of particular class.
+```
+synchronized(Display.class){
+// if the thread get the lock of Display class then only it is allowed to execute this area
+}
+```
+
+Demo code of class level lock:
+```
+
+class Display{
+    
+    public void greet(String name){
+       synchronized(Display.class){
+           for(int i=0;i<6;i++){
+            System.out.print("hello: ");
+            try{
+             Thread.sleep(2000);    
+           }catch(InterruptedException e){
+            System.out.println(e);
+          }
+           System.out.println(name);
+        }
+       }
+    }
+}
+
+public class MyThread extends Thread {
+    Display d;
+    String name;
+    
+    public MyThread(Display d, String name){
+        this.d = d;
+        this.name = name;
+    }
+    
+    public void run(){
+       d.greet(name);
+    }
+    public static void main(String[] args) {
+        Display d1= new Display();
+        Display d2= new Display();
+        MyThread t1=new MyThread(d1,"amol");
+        MyThread t2=new MyThread(d2,"ajay");
+        t1.start();
+        t2.start();
+    }
+}
+```
+
+### Class Level Lock Dia ###
+![image](https://github.com/user-attachments/assets/759bb57b-9c49-4c71-b842-8742326eca03)
+
+
+### object level lock dia ###
+![image](https://github.com/user-attachments/assets/a5d3fca0-97cb-4090-8f36-f14eb1a71348)
+
+
+### COnclusion ###
+- lock concept applicable only for object and class not for primitive. otherwise we will get compile time error saying unexpected type found int required reference.
+- If mutltiple thread are operating on same java object then there may be a chance of data inconsistancy problem this is called race condition, we can overcome this problem by using synchronization.
+- what is object lock and when it is required? whenever a thread want to execute synchronized method then it is required. example: method called using same java object.
+- what is class lock and when it is required=> Whenever a thread want to execute static synchronzed method then it is required. example method called using different java object.
+
+
+
+
 
 
 
