@@ -1097,6 +1097,79 @@ public final native void notifyAll()
 
 
 
+### Demo code of wait & notify ###
+```
+
+
+
+class ChildThread extends Thread{
+    int total = 0;
+    
+    public void run(){
+        synchronized(this){
+             System.out.println("child thread started calculation..");//2
+            for(int i=0;i<=100;i++){
+               total=total+i;
+            }
+            System.out.println("child thread notify main thread..");//3
+            this.notify();
+        }
+    }
+}
+public class MainThread {
+    public static void main(String[] args) throws InterruptedException{
+      ChildThread t = new ChildThread();
+      t.start();
+      
+      synchronized(t){ //acquired the lock of ChildThread object
+          System.out.println("main thread trying to call wait()..");//1
+          t.wait();//released the lock of ChildThread object.
+          System.out.println("main thread received notification...");//4
+          System.out.println("final ans: "+t.total);
+      }
+    }
+}
+```
+
+### CHild thread got the first chance ###
+```
+
+
+
+class ChildThread extends Thread{
+    int total = 0;
+    
+    public void run(){
+        synchronized(this){
+             System.out.println("child thread started calculation..");//2
+            for(int i=0;i<=100;i++){
+               total=total+i;
+            }
+            System.out.println("child thread notify main thread..");//3
+            this.notify();
+        }
+    }
+}
+public class MainThread {
+    public static void main(String[] args) throws InterruptedException{
+      ChildThread t = new ChildThread();
+      t.start();
+      Thread.sleep(10000);
+      synchronized(t){
+          System.out.println("main thread trying to call wait()..");//1
+          t.wait(1000);
+          System.out.println("main thread received notification...");//4
+          System.out.println("final ans: "+t.total);
+      }
+    }
+}
+```
+
+
+
+
+
+
 
    
 
