@@ -1037,9 +1037,62 @@ public class MyThread extends Thread {
 - what is class lock and when it is required=> Whenever a thread want to execute static synchronzed method then it is required. example method called using different java object.
   
 
+## Inter Thread Communication ##
+
+
+- Two threads can communicate with each other by using wait(), notify() and notifyAll().
+- The thread which is expecting updation has to call wait() then immediately the thread will enter into waiting state.
+- The thread which is responsible to perform updation, after performing updation it is responsible to call notify() then waiting thread will get that notification and continue its execution with those updated items.
+- Imp:wait(), notify(), notifyAll() methods present in Object class but not in thread class because thread can call these methods on any java object.
+- To call wait, notify or notifyAll methods on any object, thread should be owner of that object, i.e. the thread should has lock of that object. i.e. the thread should be insible synchronized area.
+- hence, we can call wait, notify and notifyAll methods only from synchronized area otherwise we will get runtime exception saying: IllegalMonitorStateException.
+- If a thread calls wait method on any object it immediately releases the lock of that particular object and entered into **waiting** state.
+- If a thread call notify method on any object it releases the lock of that object but may not immediately.
+- Except wait, notify and notifyAll there is no other method where thread releases the lock.
+
+method  | is thread releases lock?
+------------- | -------------
+sleep()  | no
+join()  | no
+yield() | no
+wait() | yes
+notify() | yes
+notifyAll() | yes
+
+
+Which of the following is valid?
+1. if the thread calls wait method, immediately it will entered into waiting without releassing lock - invalid
+2. if a thread calls wait method it releases the lock of that object but may not immediately - invalid
+3. if a thread calls wait method on any object then it releases **all locks** acquired by that thread and immediately enter into waiting state - invalid
+4. If a thread calls wait method on any object it immediately releases the lock of that particular object and entered into waiting state-valid
+5. If a thread calls notify method on any object it immediately releases the lock of that object - invalid.
+6. If a thread calls notify method on any object it releases  the lock of that object but may not immediately- valid
+
+
+### wait() ###
+
+```
+public final void wait() throws InterruptedException
+
+public final native void wait(long ms) throws InterruptedException
+
+
+public final void wait(long ms, int ns) throws InterruptedException
+```
+
+### notify() ###
+```
+public final native void notify()
+
+public final native void notifyAll()
+//notify() doesn't go in waiting state so no need of handling InterruptedException
+```
+
+**Note** Every wait method throws InterruptedException which is checked exception, hence whenever we are using wait method compulsory we should handle this exception either by try catch of throws keyword, otherwise we wil get compile time error.
 
 
 
+![image](https://github.com/user-attachments/assets/64821b2e-f5b5-46c5-8a24-9df1be31845e)
 
 
 
