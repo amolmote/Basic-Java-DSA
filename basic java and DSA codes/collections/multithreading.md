@@ -1164,6 +1164,105 @@ public class MainThread {
     }
 }
 ```
+## Producer-Consumer problem ##
+- Producer thread is responsible to produce items to the Queue and consumer thread is responsible thread to consume items from the queue.
+- If queue is empty then consumer thread will wait() and intered into waiting state.
+- After producing items to the queue, producer thread is responsible to call notify method then waiting consumer will get that notification and continue its execution with updated items.
+
+### Difference between notify() and notifyAll() ###
+
+notify() | notifyAll()
+---------|------------
+We can use notify method to give the notification for only one waiting thread If multiple threads are waiting then only one thread will be notified and the remaining threads have to wait for further notifications. which thread will be notified we can't expect it depends on jvm | we can use notifyAll() to give the notification for all waiting threads of a particular object. Even though multiple threads notified but execution will be performed because thread required lock and only one lock is available.
+
+
+Note: On which object we are calling wait method thread required the lock of that particular object, for example: if we are calling wait method on s1 then we have to get the lock of s1 object but not s2 object.
+
+## Deadlock ##
+
+- If to threads are waiting for each other forever, such type of infinite waiting is called deadlock.
+- synchronized keyword is the only reason for deadlock situation hence while using synchronized keyword we have to take special care.
+- There are no resolution techniques for deadlock but sevaral prevention techniques are available.
+
+
+### Deadlock Demo Code ###
+```
+
+class ResourceA{
+
+    synchronized void first(ResourceB b){
+        System.out.println("t1 has acquired the lock of ResourceA..");
+        b.second();
+    }   
+    
+    synchronized void second(){
+        System.out.println("won't be reach to me...");
+    }
+    
+}
+
+class ResourceB{
+    
+     synchronized void first(ResourceA a){
+         System.out.println("t2 has acquired the lock of ResourceB..");
+        a.second();
+    }   
+    
+    synchronized void second(){
+        System.out.println("won't be reach to me...");
+    }
+    
+}
+
+class MyThread1 extends Thread{
+    ResourceA objA;
+    ResourceB objB;
+   public MyThread1(ResourceA obja, ResourceB objb){
+        this.objA = obja;
+        this.objB= objb;
+    }
+    
+    public void run(){
+        objA.first(objB);
+    }
+}
+
+class MyThread2 extends Thread{
+   ResourceA objA;
+    ResourceB objB;
+   public MyThread2(ResourceA obja, ResourceB objb){
+        this.objA = obja;
+        this.objB= objb;
+    }
+    
+    public void run(){
+        objB.first(objA);
+    }
+}
+
+public class DeadLock{
+    public static void main(String[] args){
+        ResourceA a = new ResourceA();
+        ResourceB b = new ResourceB();
+        MyThread1 t1= new MyThread1(a, b);
+        MyThread2 t2= new MyThread2(a, b);
+        t1.start();
+        t2.start();
+        
+    }
+}
+```
+
+In the above program if we remove atleast one synchronzed keyword then the program won't enter into deadlock hence synchronized keyword is the only reason for the deadlock situation due to this while using synchronzed keyword we have to take special care.
+
+## DeadLock vs Starvation ##
+
+- Long waiting of a thread where waiting never ends is called Deadlock.
+- Where as long waiting of a thread where waiting ends at certain point is called Starvation.
+- example: low priority thread has to wait until completing all high priority threads, it may be long waiting but ends at certain point, which is nothing but starvation.
+
+
+
 
 
 
