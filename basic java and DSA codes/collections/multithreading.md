@@ -1262,6 +1262,46 @@ In the above program if we remove atleast one synchronzed keyword then the progr
 - example: low priority thread has to wait until completing all high priority threads, it may be long waiting but ends at certain point, which is nothing but starvation.
 
 
+## Daemon Thread ##
+
+- The threads which are executing in the background are called Daemon threads.
+- example: Garbage collector, signal dispatcher, attached listener etc.
+- The main objective of daemon thread is to provide support for non-daemon threads(main thread). example: if main thread runs with low memory then JVM runs garbage collector to distroy useless objects, so that number of bytes of free memory will be improved with this free memory main thread can continue its execution.
+- Usually, daemon threads having low priority but based on our requirement daemon threads can run with high priority also.
+- We can check daemon nature of a thread by using isDaemon() of Thread class.
+```
+public boolean isDaemon()
+```
+- We can change daemon nature of a thread by using setDaemon()
+```
+public void setDaemon(boolean b)
+```
+- But, changing daemon nature is possible before starting of a thread only. after starting a thread if we are trying to change daemon nature then we will get runtime exception saying **IllegalThreadStateException**.
+
+### Default Nature of a thread ###
+- By default main thread is always non-daemon. and for all remaining threads will be inherited from parent to child. i.e. if the parent thread is daemon then automatically child thread is also daemon.
+- And if the parent thread is non-daemon then automatically child thread is also non-daemon.
+
+Note: it is imposible to change the daemon nature of a main thread. because it is already started by JVM at beginning.
+
+Daemon Thread code:
+```
+class MyThread extends Thread{
+    
+}
+public class DaemonThreadDemo {
+    public static void main(String[] args) {
+        System.out.println(Thread.currentThread().isDaemon());//false
+        //Thread.currentThread().setDaemon(true);//IllegalThreadStateException
+        
+        MyThread t = new MyThread();
+        System.out.println(t.isDaemon());
+        t.setDaemon(true);
+        System.out.println(t.isDaemon());
+    }
+}
+```
+
 
 
 
