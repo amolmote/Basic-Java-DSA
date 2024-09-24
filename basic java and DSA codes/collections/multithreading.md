@@ -1326,7 +1326,7 @@ public class NonDaemonThread {
 ```
 
 
-##
+
 
 - Java multithreading concept is implemented by following two models.
 - 1: Green Thread Model 2: Native OS Model
@@ -1339,6 +1339,9 @@ public class NonDaemonThread {
 ### Native OS Model ### 
 - The thread which is managed by the JVM with the help of underlying OS, is called Native OS Model.
 - All windows based operating system provide support for native OS model.
+
+
+### How to stop a thread? ###
 
 
 
