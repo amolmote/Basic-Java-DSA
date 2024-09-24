@@ -1302,6 +1302,43 @@ public class DaemonThreadDemo {
 }
 ```
 
+- Whenever last non-daemon thread terminates automatically all daemon threads will be terminated irrespective of there position.
+- demo code:
+
+
+ ```
+class DaemonThread extends Thread{
+    
+    public void run(){
+        for(int i=0;i<6;i++){
+            System.out.println("child thread..");
+        }
+    }
+}
+public class NonDaemonThread {
+    public static void main(String[] args) {
+        DaemonThread t = new DaemonThread();
+        t.setDaemon(true);
+        t.start();
+        System.out.println("main thread terminated...");
+    }
+}
+```
+
+
+##
+
+- Java multithreading concept is implemented by following two models.
+- 1: Green Thread Model 2: Native OS Model
+
+### Green Thread ###
+- The thread which is managed completely by JVM without taking underlying OS support is called green thread.
+- Very few operating systems provide support for green thread model.
+- anyway green thread model is deprecated and not recommonded to use.
+
+### Native OS Model ### 
+- The thread which is managed by the JVM with the help of underlying OS, is called Native OS Model.
+- All windows based operating system provide support for native OS model.
 
 
 
