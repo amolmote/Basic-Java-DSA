@@ -1343,6 +1343,30 @@ public class NonDaemonThread {
 
 ### How to stop a thread? ###
 
+- We can stop a thread execution by using stop method of Thread class.
+```
+public void stop()
+```
+- If we call stop() method then immediately the thread will enter into dead state. anyway stop method is deprecated and not recommonded to use.
+
+
+
+
+
+### How to suspend and resume of a thread ? ###
+- We can suspend a thread by using suspend() of Thread class then immediately the thread will be entered into suspended state.
+- We can resume a suspended thread by using resume() of Thread class then suspended thread can continue its execution.
+```
+public void suspend()
+public void resume()
+```
+
+- anyway these methods are deprecated and not recommonded to use.
+
+## Thread Lifecycle ##
+![image](https://github.com/user-attachments/assets/81afdc44-32af-4926-a82a-5a7c2c10943a)
+
+
 
 
 
