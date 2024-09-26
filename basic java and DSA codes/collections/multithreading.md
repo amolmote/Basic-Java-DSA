@@ -1368,6 +1368,84 @@ public void resume()
 
 
 
+## Thread Group ##
+
+- Based on functionality we can group threads into a single unit, which is nothing but thread group.
+- i.t. thread group contains a group of threads.
+- In addition to threads thread group can also contain sub-thread groups.
+
+
+![image](https://github.com/user-attachments/assets/2634e7a3-2e8c-4766-ac9f-a4dd42fdade6)
+
+
+- The main advantage of maintaining threads in the form of thread group is we can perform common operations very easily.
+- Every thread in java belongs to the some thread group.
+- main thread belongs to **main** group.
+- every thread group in java is child group of **System** group, either directly or indirectly, hence System group acts as root for all thread groups in java.
+- System group contains sevaral system level threads like finalizer, reference handler,signal dispatcher, attach listener.
+
+```
+class MainThreadGroup {
+    public static void main(String[] args) {
+        System.out.println(Thread.currentThread().getThreadGroup().getName());//main
+        
+        System.out.println(Thread.currentThread().getThreadGroup().getParent());//name=system,maxpri=10
+    }
+}
+```
+
+
+![image](https://github.com/user-attachments/assets/5b2897b5-0e2c-4ff8-a459-71d6a6b63e1a)
+
+### Thread Group class ###
+
+
+- ThreadGroup is a java class present in java.lang package and it is the direct child of Object.
+
+### Constructors ###
+1. ThreadGroup g = new ThreadGroup(String name);
+  - Creates a new ThreadGroup with the specified group name.
+  - The parent of this new group is the thread group of currently exeucting thread.
+  - demo code
+```
+class MainThreadGroup {
+    public static void main(String[] args) {
+        ThreadGroup g = new ThreadGroup("demo");
+        
+        System.out.println(g.getParent().getName());//main
+    }
+}
+
+2.  ThreadGroup g1 = new ThreadGroup(ThreadGroup pg, String name);
+   - Creates a new ThreadGroup with the specified group name.
+   - The parent of this new thread group is specified parent group.
+   - example: 
+```
+class MainThreadGroup {
+    public static void main(String[] args) {
+        ThreadGroup g = new ThreadGroup("demo");
+        System.out.println(g.getParent().getName());//main
+        ThreadGroup g1 = new ThreadGroup(g, "childofdemo");
+        System.out.println(g1.getParent().getName());//demo
+    }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
