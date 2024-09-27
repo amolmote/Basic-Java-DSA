@@ -1431,6 +1431,82 @@ class MainThreadGroup {
 }
 ```
 
+### Imp methods of ThreadGroup class ###
+
+
+1. String getName(): returns name of the thread group.
+2. int getMaxPriority(): returns max priority of thread group.
+3. void setMaxPriority(int p): to set maximum priority of thread group. the default max priority is 10. threads in the thread group that already have higer priority won't be affected but for newly added threads this max priority is applicable.
+```
+class TGPriorityDemo {
+    public static void main(String[] args) {
+        ThreadGroup g = new ThreadGroup("tg");
+        System.out.println(g.getMaxPriority());//10
+        Thread t1=new Thread(g, "first-thread");
+        Thread t2=new Thread(g, "second-thread");
+        g.setMaxPriority(3);
+        Thread t3=new Thread(g,"third thread");
+        System.out.println(t1.getPriority());//5
+        System.out.println(t2.getPriority());//5
+        System.out.println(t3.getPriority());//3
+    }
+}
+```
+4. ThreadGroup getParent(): returns parent group of current thread.
+5. void list(): It prints information about thread group to the console.
+6. int activeCount(): returns number of active thread present in the thread group.
+7. int activeGroupCount(): it returns number of active groups present in the current thread group.
+8. int enumerate(Thread[] t): to copy all active threads of this thread group into provided thread array. In this case sub-thread group threads also considered.
+9. int enumerate(ThreadGroup[] g): To copy all active sub-thread groups into ThreadGroup array.
+10. boolean isDaemon(): to check whether the ThreadGroup is daemon or not.
+11: void setDaemon(boolean b):
+12: void interrupt(): To interrupt all waiting or sleeping thread present in the thread group.
+13: void distroy(): To distroy thread groups and its sub-thread groups.
+
+```
+
+
+class MyThread extends Thread{
+    
+    public MyThread(ThreadGroup g, String name){
+        super(g, name);
+    }
+    
+    public void run(){
+        System.out.println("child thread..");
+        try{
+            Thread.sleep(4000);
+        }catch(Exception e){}
+    }
+}
+
+public class ThreadGroupDemo {
+    public static void main(String[] args) {
+        ThreadGroup pg = new ThreadGroup("parent-group");
+        ThreadGroup cg = new ThreadGroup("child-group");
+        
+        MyThread t1= new MyThread(pg, "first-thread");
+        MyThread t2= new MyThread(pg, "second-thread");
+        MyThread t3= new MyThread(cg, "third-thread");
+        t1.start();
+        t2.start();
+        t3.start();
+        
+        pg.list();
+        cg.list();
+        
+        System.out.println(pg.activeCount());
+        System.out.println(Thread.currentThread().getThreadGroup().activeGroupCount());//active thread groups present in main thread group.
+        
+    }
+}
+```
+
+
+
+
+
+
 
 
 
