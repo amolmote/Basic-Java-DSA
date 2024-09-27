@@ -1415,6 +1415,7 @@ class MainThreadGroup {
         System.out.println(g.getParent().getName());//main
     }
 }
+```
 
 2.  ThreadGroup g1 = new ThreadGroup(ThreadGroup pg, String name);
    - Creates a new ThreadGroup with the specified group name.
@@ -1463,9 +1464,9 @@ class TGPriorityDemo {
 12: void interrupt(): To interrupt all waiting or sleeping thread present in the thread group.
 13: void distroy(): To distroy thread groups and its sub-thread groups.
 
+
+
 ```
-
-
 class MyThread extends Thread{
     
     public MyThread(ThreadGroup g, String name){
