@@ -1758,10 +1758,202 @@ public class TryLockDemo {
 }
 ```
 
+## Thread Pools(Executor framework ##
+- Creating a new thread for every job may create performance and memory problem, to overcome this we should go for thread pool.
+- Thread pool is a pool of already created thread, ready to do our job.
+- java 1.5v introduces thread pool framework to implement thread pools.
+- thread pool framework also known as executor framework.
+- we can create a thread pool as follows:
+```
+ExecutorService service = Executors.newFixedThreadPool(3)
+```
+- We can submit a Runnable job by using submit(). as follows:
+```
+service.submit(job);
+```
+- We can shut down executor service by using shutdown().
+```
+service.shutdown();
+```
+
+### Demo code ###
+```
+import java.util.concurrent.*;
+
+
+class PrintingJob implements Runnable{
+    String name;
+    
+    public PrintingJob(String name){
+       this.name = name;    
+    }
+    
+    public void run(){
+        System.out.println(name+" job started by "+Thread.currentThread().getName());
+        try{
+            Thread.sleep(2000);
+        }catch(InterruptedException e){}
+        
+        System.out.println(name+" job completed by "+Thread.currentThread().getName());
+    }
+}
+public class ExecutorDemo {
+    public static void main(String[] args) {
+        PrintingJob[] jobs = {
+          new PrintingJob("A"),
+          new PrintingJob("B"),
+          new PrintingJob("C"),
+          new PrintingJob("D"),
+          new PrintingJob("E"),
+          new PrintingJob("F")
+        };
+        ExecutorService service = Executors.newFixedThreadPool(3);
+        
+        for(PrintingJob job: jobs){
+            service.submit(job);
+        }
+        service.shutdown();
+    }
+}
+```
+
+- In the above example 3 threads are responsible to execute 6 jobs so that a single thread can be reused for multiple jobs.
+
+
+ ### Note ###
+ - while developing web service we can use thread pool concept.
+
+
+## Callable(I) & Future ##
+- In the case of Runnable job thread won't return anything after completing the job.
+- If a thread is required to return some result after execution then we should go for **Callable**.
+- Callable interface contain only one method- call()
+```
+public Object call() throws Exception
+```
+- If we submit a Callable object to executor then after completing the job thread returns an object of the type **Future**.
+- i.t. Future object can be used to retrive the result from Collable job.
 
 
 
+```
+import java.util.concurrent.*;
 
+
+class MyCallable implements Callable{
+    int sum=0;
+    int num;
+    public MyCallable(int num){
+        this.num= num;
+    }
+    
+    public Object call() throws Exception{
+        System.out.println(Thread.currentThread().getName()+" calculating sum of first "+num+" numbers");
+        for(int i=1;i<=num;i++){
+            sum=sum+i;
+        }
+        return sum;
+    }
+}
+public class CallableFutureDemo {
+    public static void main(String[] args) throws Exception {
+        MyCallable[] c = {
+            new MyCallable(10),
+            new MyCallable(20),
+            new MyCallable(30),
+            new MyCallable(40),
+            new MyCallable(60),
+            new MyCallable(70)
+        };
+        
+        ExecutorService service = Executors.newFixedThreadPool(3);
+        for(MyCallable c1: c){
+            Future f= service.submit(c1);
+            System.out.println("sum: "+f.get());
+        }
+        service.shutdown();
+    }
+}
+```
+
+### DIfference between Runnable & Callable ###
+
+Runnable | Callable
+---------|----------
+If a thread is not required to return anything after completing the job then we should go for Runnable | If a thread required to return something after completing the job then we should go for Callable 
+Runnable interface contains only one method- run() | Callable interface contains only one method- call()
+Runnable job not required to return anything and hence return type of run method is void | Callable job is required to return something and hence return type of call method is Object.
+Within the run method if there is any chance of raising the checked exception compulsory we should handle by using try-catch because we can't use throws keyword for run method | within call method if there is any chance raising checked exception we are not required to handle because call method already throws Exception.
+Runnable interface present in java.lang package | Callable interface present in java.util.concurrent package. 
+Introduced in 1.0v | introduced in 1.5v
+
+
+## ThreadLocal ##
+- ThreadLocal class provides thread local variables.
+- ThreadLocal class maintains values per thread basis.
+- Each thread local object maintains a separate value like userid, transaction id etc.for each thread that access that object.
+- Thread can access its local value, can manupulate its value and even can remove its value.
+- In every part of the code which is executed by the thread we can access its local variable.
+
+
+
+-   consider a servlet which invokes some business methods we have a requirement to generate a unique transaction id for each and every request and we have to pass this transaction id to the business methods, for this requirement ThreadLocal to maintain a separate transaction id for every request that is for every thread.
+
+
+
+**Note:**
+- ThreadLocal class introduced in 1.2v and enhanced in 1.5v.
+- ThreadLocal can be associated with thread scope.
+- Total code which is executed by the thread has acces to the corresponding thread local variable.
+- A thread can access its own local variables and can't access other threads local variables.
+- Once thread entered into dead state, all its local variables are by default eligible for garbage collection.
+
+
+
+### Constructor of ThreadLocal ###
+
+ThreadLocal tl=new ThreadLocal(); creates a ThreadLocal variable
+
+
+### Methods of ThreadLocal class ###
+1. Object get(): returns the value of the ThreadLocal variable associated with current thread.
+2. Object initialValue(): returns initial value of ThreadLocal variable associated with current thread. The default implementation of this method returns null. to customize our own initial value we have to override this method.
+3. void set(Object newValue): To set a new value.
+4. void remove(): To remove the value of ThreadLocal value associated with the current thread. It is newly added method in 1.5v. after removal if we are trying to access it will be reintialized once again by invoking initialValue method.
+
+
+```
+class ThreadLocalDemo {
+    public static void main(String[] args) {
+       ThreadLocal tl= new ThreadLocal();
+       System.out.println(tl.get());//null
+       tl.set("amol");
+       System.out.println(tl.get());//amol
+       tl.remove();
+         System.out.println(tl.get());//null
+    }
+}
+```
+
+
+### overriding initialValue ###
+```
+
+class ThreadLocalDemo {
+    public static void main(String[] args) {
+       ThreadLocal tl= new ThreadLocal(){
+           public Object initialValue(){
+               return "abc";
+           }
+       };
+       System.out.println(tl.get());//abc
+       tl.set("amol");
+       System.out.println(tl.get());//amol
+       tl.remove();
+         System.out.println(tl.get());//abc
+    }
+}
+```
 
 
 
