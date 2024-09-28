@@ -1631,8 +1631,132 @@ class ReentrantLockDemo {
 }
 ```
 
+### ReentrantLock replaced with synchronized keyword code ###
+```
+import java.util.concurrent.locks.*;
+
+class Display{
+    
+    ReentrantLock l=new ReentrantLock();
+    
+    public  void greet(String name){
+        l.lock();//------>1
+        for(int i=0;i<10;i++){
+            System.out.print("hello: ");
+            try{
+                Thread.sleep(1000);
+            }catch(InterruptedException e){}
+        
+        System.out.println(name);    
+        }
+        l.unlock();//---->2
+    }
+}
+
+class MyThread extends Thread{
+    Display d;
+    String name;
+    
+    public MyThread(Display d, String n){
+        this.d = d;
+        this.name = n;
+    }
+    
+    public void run(){
+        d.greet(name);
+    }
+}
+public class ReentrantLockDemo1 {
+    public static void main(String[] args) {
+     Display d=new Display();
+     MyThread t1=new MyThread(d, "amol");
+     MyThread t2=new MyThread(d, "sarkar");
+     t1.start();
+     t2.start();
+    }
+}
+```
+
+- if we comment line 1 and line 2 then the threads will be executed simultaneously and we will get irregular output.
+- If we are not commenting line 1 and 2 then threads will be executed one by one. and we will get regular output.
+
+### Demo program for tryLock method ###
+```
+import java.util.concurrent.locks.*;
 
 
+class MyThread extends Thread{
+    
+    static ReentrantLock l= new ReentrantLock();
+    
+    public MyThread(String threadName){
+        super(threadName);
+    }
+    public void run(){
+        if(l.tryLock()){
+            System.out.println(Thread.currentThread().getName()+" has acquired the lock to perform safe operations...");
+            try{
+                Thread.sleep(4000);
+            }catch(InterruptedException e){}
+            
+            l.unlock();
+        }else{
+            System.out.println(Thread.currentThread().getName() +" is unable to acquire lock hence performing alternative operation..");
+        }    
+    }
+}
+public class TryLockDemo {
+    public static void main(String[] args) {
+       MyThread t1=new MyThread("first-thread");
+       MyThread t2=new MyThread("second-thread");
+       t1.start();
+       t2.start();
+    }
+}
+```
+
+
+### Try to get lock ###
+```
+import java.util.concurrent.locks.*;
+import java.util.concurrent.*;
+
+class MyThread extends Thread{
+    
+    static ReentrantLock l= new ReentrantLock();
+    
+    public MyThread(String threadName){
+        super(threadName);
+    }
+    public void run(){
+        
+        do{
+            try{
+            if(l.tryLock(3000, TimeUnit.MILLISECONDS)){
+                System.out.println(Thread.currentThread().getName()+" has acquired the lock..");
+                try{
+                    Thread.sleep(30000);
+                }catch(InterruptedException e){}
+                
+                System.out.println(Thread.currentThread().getName()+" has released lock...");
+                l.unlock();
+                break;
+            }else{
+                System.out.println(Thread.currentThread().getName()+" unable to get the lock, still trying");
+            }
+            }catch(InterruptedException e){}
+        }while(true);   
+    }
+}
+public class TryLockDemo {
+    public static void main(String[] args) {
+       MyThread t1=new MyThread("first-thread");
+       MyThread t2=new MyThread("second-thread");
+       t1.start();
+       t2.start();
+    }
+}
+```
 
 
 
