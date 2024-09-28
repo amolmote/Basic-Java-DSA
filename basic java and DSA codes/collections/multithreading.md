@@ -1503,9 +1503,133 @@ public class ThreadGroupDemo {
 }
 ```
 
+![image](https://github.com/user-attachments/assets/5422ab81-7537-45df-8918-627f26c3ad98)
 
 
 
+### WAP to display all active thread names belongs to System group and its child groups ###
+
+```
+class SystemThreadGroup {
+    public static void main(String[] args) {
+        ThreadGroup sys = Thread.currentThread().getThreadGroup().getParent();
+        sys.list();
+        
+        
+        Thread[] t = new Thread[sys.activeCount()];
+        sys.enumerate(t);
+        
+        for(Thread t1 : t){
+            System.out.println(t1.getName()+"---"+t1.isDaemon());
+        }
+    }
+}
+```
+
+## java.lang.concurrent package ##
+
+
+### The Problems with the traditional synchronized keyword ###
+1. We are not having any flexibility to try for a lock without waiting.
+2. There is no way to specify the maximum waiting time for a thread to get lock so that thread will wait until getting the lock which may creates performance problems which may cause deadlock.
+3. If a thread releases the lock then which waiting thread will get that lock we are not having any control on this.
+4. There is no API to list out all waiting threads for a lock.
+5. The synchronized keyword compulsory we have to use either at method level or within the method and it is not possible to use across multiple methods.
+6. To overcome these problems sun people introduced **java.util.concurrent.locks** package in 1.5v.
+7. It also provides sevaral inhancements to the programmer to provide more control on concurrency.
+
+
+## Lock(I) ##
+- Lock object is similar to implicit lock acquired by a thread to execute synchronized method or synchronized block.
+- Lock implementation provides more extensive operation than tradition implicit locks.
+- Important methods of Lock interface:
+1. void lock(): We can use this method to acquire a lock. if lock is already available then immediately current thread will get that lock. if the lock is not already available then it will wait until getting the lock. It is the exactly same behavior as traditional synchronized keyword.
+2. boolean tryLock(): To acquire the lock without waiting. If the lock is available then the thread acquires that lock and returns true. if the lock is not available then this method returns false and can continue its execution without waiting. In this case, thread never be entered into waiting state.
+```
+if(l.tryLock()){
+   // safe operations
+} else{
+  //alternative operations
+}
+```
+3. boolean tryLock(long time, TimeUnit unit): If lock is available then thread will get the lock and can continue its execution. If the lock is not available then the thread will wait until specified amount of time, still if the lock is not available then thread can continue its execution.
+TimeUnit: It is an enum, present in java.util.concurrent package.
+```
+enum TimeUnit{
+NANOSECONDS;
+MICROSECONDS;
+MILLISECONDS;
+SECONDS;
+MINUTES;
+HOURS;
+DAYS;
+}
+```
+example: 
+```
+if(l.tryLock(1000, TimeUnit.SECONDS)){
+
+}else{
+
+}
+```
+4. void lockInterruptibly(): acquires the lock if it is available and returns immediately. if the lock is not available then it will wait, while waiting if the thread is interrupted then thread won't get the lock.
+5. void unlock():to release the lock, To call this method compulsory the current thread should be owner of this lock otherwise we will get RuntimeEception sayig **IllegalMonitorStateException**.
+
+## ReentrantLock (C) ##
+- It is the implementation class of Lock interface and it is the direct child class of Object.
+- Reenterant means a thread can acquire same lock multiple times without any issue.
+- Internally, Reentrant lock increaments threads personal count whenever we call lock method and decrement count value whenever thread calls unlock method. and lock will be released whenever count reaches 0.
+
+### Contructors ###
+1. ReentrantLock l= new ReentrantLock();
+Creates an instance of ReentrantLock.
+2. ReentrantLock l= new ReentrantLock(boolean fairness);
+Creates ReenterantLock object with the given fairness policy. If the fairness is true then longest waiting thread can acquire the lock if it is available. i.e. it follows FIFO. If fairness is false then which waiting thread will get the chance we can't expect. The default valur for fairness is **false**.
+
+### Which of the following declarations are equal ? ###
+- ReentrantLock l=new ReentrantLock();
+- ReentrantLock l =new ReentrantLock(true);
+- ReentrantLock l=new ReentrantLock(false);
+first and third are equal.
+
+### Important methods of ReenterantLock ###
+- void lock()
+- boolean tryLock()
+- boolean tryLock(long l, TimeUnit unit)
+- void lockInterruptbly()
+- void unlock()
+
+
+1. int getHoldCount(): returns number of holds on this lock by current thread.
+2. boolean isHeldByCurrentThread(): returns true if and only if lock is hold by current thread.
+3. int getQueueLength(): returns number of threads waiting for the lock.
+4. Collection getQueuedThreads(): It returns a collection of threads which are waiting to get the locks.
+5. boolean hasQueuedThreads(): returns true if any thread is waiting to get the lock.
+6. boolean isLocked(): returns true if the lock is acquired by some thread.
+7. boolean isFair(): return true if the fairness policy is set with true value.
+8 Thread  getOwner(): returns the thread which has acquired the lock.
+
+```
+import java.util.concurrent.locks.*;
+
+class ReentrantLockDemo {
+    public static void main(String[] args) {
+        ReentrantLock l = new ReentrantLock();
+        l.lock();
+        l.lock();
+        System.out.println(l.isLocked());//true
+        System.out.println(l.isHeldByCurrentThread());//true
+        System.out.println(l.getQueueLength());//0
+        l.unlock();
+        System.out.println(l.getHoldCount());//1
+        System.out.println(l.isLocked());//true
+        l.unlock();
+        System.out.println(l.isLocked());//false
+        System.out.println(l.isFair());//false
+    }
+}
+```
 
 
 
