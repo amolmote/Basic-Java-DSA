@@ -257,5 +257,97 @@ javac Test.java
 Test.java:8: error: incompatible types: String cannot be converted to boolean
               boolean b= "true";
 
+
+                    int x=0;
+		  if(x){ //invalid
+			  System.out.println("hello");
+		  }else{
+			  System.out.println("hiii");
+		  }
+
+error: incompatible types: int cannot be converted to boolean
+                  if(x){
+
+
+ while(1){//invalid
+    System.out.println("hello");
+ }
+error: incompatible types: int cannot be converted to boolean
+                  while(1){
 ```
+
+### char ###
+- old languages like C or C++(ASCII code based) and the number of  allowed different ASCII code characters and <=256.
+- To represent these 256 characters 8 bits are enough hence the size of char in old languages is 1 byte.
+- But java is UNICODE based and the number of different UNICODE characters are greater than 256 <= 65536.
+- To represent these many characters 8 bits may not enough, compulsory we should go for 16 bits.
+- hence the size of char in java is 2 bytes.
+- range: 0 to 65535(total 65536 including 0)
+
+
+### Summary ###
+Data type | size | range | wrapper class | default value
+----------|-------|------|---------------|--------------
+byte  | 1 byte | -2^7 to 2^7-1(-128 to 127) | Byte | 0
+short | 2 byte | -2^15 to s^15(-32768 to 32767) | Short |  0
+int |  4 byte | -2^31 to 2^31-1( -2747483648 to 2747483647) | Integer | 0
+long | 8 byte | -2^63 to 2^63-1 | Long | 0
+float | 4 byte | -3.4e38 to 3.4e38 | Float | 0.0
+double | 8 byte | -1.7e308 to 1.7e308 | Double | 0.0
+boolean | NA | NA  |  Boolean |  false
+char | 2 byte | 0 to 65535 | Character | 0(represents space character)
+
+- null is default value for object reference and we can't apply for premitive, if we are trying to use for premitive then we will get compile time error.
+example:
+```
+char ch=null
+incompatible type found null required char
+```
+
+
+## Literal ##
+
+- any constant value which can be assigned to variable is called Literal.
+- example:
+```
+int x= 10;
+int is datatype
+x is a indentifier
+10 is a literal/constant value
+```
+
+### Integral Literals ###
+for Integral datatypes(byte, short, int, long) we can specify literal value in the following ways
+
+
+### Decimal form ###
+-  base 10
+-  allowed digits are 0 to 9
+-  example int x=10;
+
+### Octal form ###
+- base 8
+- allowed digits are 0 to 7
+- literal value should be prefixed with 0.
+- example: int x=010;
+
+### Hexadecimal form ###
+- base 16
+- allowed digits are 0 to 9, a to f( we can use both lower case and upper case characters for extra digit this is one of the very few areas where java is not
+case sensitive)
+- The literal value should be prefixed with 0x or 0X.
+- example: int x=0X10;
+
+These are only possible ways of specify literal for integral data types.
+
+### Valid or Invalid Literal ###
+```
+int x=10;  //valid
+int x=0786;  //invalid(8)-CE:Integer number too large
+int x=0777; //valid
+int x=0XFace; // valid
+int x=0XBeef; //valid
+int x=0XBeer; //invalid due to r, 
+```
+
 
