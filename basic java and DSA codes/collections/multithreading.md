@@ -1955,10 +1955,149 @@ class ThreadLocalDemo {
 }
 ```
 
+### Assign customer id for each customer thread ###
+```
 
 
 
+class CustomerThread extends Thread{
+    static int custId=0;
+    
+    static ThreadLocal tl=new ThreadLocal(){
+        public Object initialValue(){
+            return ++custId;
+        }
+    };
+    
+    public CustomerThread(String name){
+        super(name);
+    }
+    
+    public void run(){
+        System.out.println(Thread.currentThread().getName()+" has id is: "+tl.get());
+    }
+}
+public class ThreadLocalDemo {
+    public static void main(String[] args) {
+       CustomerThread c1 = new CustomerThread("cust-thread-1");
+       CustomerThread c2 = new CustomerThread("cust-thread-2");
+       CustomerThread c3 = new CustomerThread("cust-thread-3");
+       CustomerThread c4 = new CustomerThread("cust-thread-4");
+       c1.start();
+       c2.start();
+       c3.start();
+       c4.start();
+    }
+}
+```
 
+- In the above program for every customer thread a separate customer id will be maintained by thread local object.
+
+
+### ThreadLocal vs Inheritance ###
+- Parent thread ThreadLocal variable by default not available to the child thread.
+```
+
+
+class ParentThread extends Thread{
+    
+    public static ThreadLocal tl= new ThreadLocal();
+    
+    public void run(){
+        tl.set("pp");
+        System.out.println("parent thread value: "+tl.get());
+        ChildThread t=new ChildThread();
+        t.start();
+    }
+}
+
+class ChildThread extends Thread{
+    
+    public void run(){
+        System.out.println("child thread value: "+ParentThread.tl.get());
+    }
+}
+public class ThreadLocalDemo {
+    public static void main(String[] args) {
+        ParentThread t=new ParentThread();
+        t.start();
+    }
+}
+```
+- If we want to make parent threads ThreadLocal value available to child thread then we should go for **InheritableThreadLocal** class.
+```
+
+
+class ParentThread extends Thread{
+    
+    public static InheritableThreadLocal tl= new InheritableThreadLocal();
+    
+    public void run(){
+        tl.set("pp");
+        System.out.println("parent thread value: "+tl.get());
+        ChildThread t=new ChildThread();
+        t.start();
+    }
+}
+
+class ChildThread extends Thread{
+    
+    public void run(){
+        System.out.println("child thread value: "+ParentThread.tl.get());
+    }
+}
+public class ThreadLocalDemo {
+    public static void main(String[] args) {
+        ParentThread t=new ParentThread();
+        t.start();
+    }
+}
+```
+- By default child thread value is exactly same as parent thread value but we can provide customized value for child thread by overriding **childValue()**.
+```
+
+
+class ParentThread extends Thread{
+    
+    public static InheritableThreadLocal tl= new InheritableThreadLocal(){
+        public Object childValue(Object p){
+            return "cc";
+        }
+    };
+    
+    public void run(){
+        tl.set("pp");
+        System.out.println("parent thread value: "+tl.get());
+        ChildThread t=new ChildThread();
+        t.start();
+    }
+}
+
+class ChildThread extends Thread{
+    
+    public void run(){
+        System.out.println("child thread value: "+ParentThread.tl.get());
+    }
+}
+public class ThreadLocalDemo {
+    public static void main(String[] args) {
+        ParentThread t=new ParentThread();
+        t.start();
+    }
+}
+```
+
+Constructor:
+```
+InheritableThreadLocal tl=new InheritableThreadLocal();
+```
+
+methods: 
+- InheritableThreadLocal is the child class of ThreadLocal and hence all methods present in ThreadLocal by default available to InheritableThreadLocal.
+- In addition to this method it contains one method:
+  ```
+   public Object childValue(Object p)
+```
 
 
 
