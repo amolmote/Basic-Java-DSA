@@ -350,4 +350,102 @@ int x=0XBeef; //valid
 int x=0XBeer; //invalid due to r, 
 ```
 
+```
+class Example {
+    public static void main(String[] args) {
+       int a=10;
+       int b=010;
+       int c=0X10;
+       System.out.println(a+"--"+b+"---"+c);//10--8---16
+    }
+}
+```
+- by default every integral literal is of int type but we can specify explicitly as long type by suffixed with 'l' or 'L'.
+
+```
+int x=10;//valid
+long x=10l;//valid
+int x=10l; //invalid CE: possibly loss of precision required long found int.
+long x=10;//valid
+
+- There is no direct way to specify byte and short literals explicitly, but indirectly we can specify.
+- whenever we are assigning integral literal to the byte variable and if the value within the range of byte and short then compiler treats it automatically
+as byte and short literal.
+
+```
+byte b=10;//valid
+byte b=127; //valid
+byte b=128; //invalid ce: PLS found int required short.
+
+short b=10;//valid
+short b=32767; //valid
+short b=32768; //invalid ce: PLS found int required short.
+```
+
+
+### Floating point literals ###
+
+- by default every floating point literal is of **double** type and hence we can't assign directly to the float variable.
+- but we can specify floating point literal as float type by suffixed with **f** or **F**.
+
+```
+float f=123.123;//incompatible types: possible lossy conversion from double to float
+
+float f=123.123f;//valid 
+
+double d=123.123;//valid 
+
+double d=123.123D;//valid-not required to mention double explicitly
+```
+
+- We can specify explicitly floating point literal as double type by suffixed with **d** or **D**. off course this convention is not required.
+- we can specify floating point literals only in **decimal form** and we can't specify in octal and hexadecimal forms.
+example:
+```
+double d=123.123;//valid
+
+double d=0123.123;// valid output is 123.123
+
+double d=0x123.123;//invalid malformed floating point literal
+```
+
+- We can assign integral literal directly to the floating point variables and that integral literal can be specified either in decimal or octal or hexadecimal
+forms.
+
+```
+double d=0678;//integer number too large(exceeds octal range of 0-7)
+
+double d=0678.0;//valid
+
+double d=0xFace;//valid (hexa form)
+
+double d=0xFace.0;//malformed floating point literal
+
+double d=0777;//valid-octal form      
+
+```
+
+
+- we can't assign floating point literals to integral types.
+```
+double d=10; valid
+int a=10.0; //invalid PLS found double required int
+```
+
+- We can specify floating point literal even in exponential form(scientific notation)
+```
+ double d=1.2e3;//valid 1200=12*10^3
+
+ float f=1.2e3;//invalid CE: PLS found double required float
+
+ float f=1.2e3f;//valid
+ ```
+
+### Allowed boolean literal ###
+- Only allowed value for boolean are **true** or **false**
+
+
+
+
+
 
