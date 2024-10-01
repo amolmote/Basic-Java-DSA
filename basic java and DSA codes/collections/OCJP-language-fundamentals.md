@@ -367,6 +367,7 @@ int x=10;//valid
 long x=10l;//valid
 int x=10l; //invalid CE: possibly loss of precision required long found int.
 long x=10;//valid
+```
 
 - There is no direct way to specify byte and short literals explicitly, but indirectly we can specify.
 - whenever we are assigning integral literal to the byte variable and if the value within the range of byte and short then compiler treats it automatically
@@ -427,12 +428,14 @@ double d=0777;//valid-octal form
 
 
 - we can't assign floating point literals to integral types.
+
 ```
 double d=10; valid
 int a=10.0; //invalid PLS found double required int
 ```
 
 - We can specify floating point literal even in exponential form(scientific notation)
+
 ```
  double d=1.2e3;//valid 1200=12*10^3
 
