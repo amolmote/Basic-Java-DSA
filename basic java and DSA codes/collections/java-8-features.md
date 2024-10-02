@@ -350,7 +350,168 @@ Runnable r=new Runnable(){
 
 - Anonymous inner class is not equivalent to the lambda expression
 - If anonymous inner class implements a interface which contains single abstract method then only we can replace that anonymous inner class with
-  lambda expression
+  lambda expression.
+
+- Anonymous inner class can extends a normal class.
+- Anonymous inner class can extend an abstract class.
+- Anonymous inner class can implmenent interface, which contains any number of abstract methods.
+
+
+- Lambda expression can interface which contains a single abstract method.
+
+
+## Default methods in interface ##
+
+- Without affecting if we want to add new methods to the interface then we should go for default method.
+- dummy implementation
+- implementation class is responsible for providing proper implementation.
+- Object class methods we can't declare as default in interface, as implementation class already has the Object class all the methods.
+
+
+-invoking default method 
+```
+interface Interf{
+    default void m1(){
+        System.out.println("default method of interface..");
+    }
+}
+class Demo implements Interf {
+    public static void main(String[] args) {
+         Demo d=new Demo();
+         d.m1();
+    }
+}
+```
+- overriding default method implementation
+
+```
+interface Interf{
+    default void m1(){
+        System.out.println("default method of interface..");
+    }
+}
+class Demo implements Interf {
+    
+    public void m1(){
+        System.out.println("overriden method from interface..");
+    }
+    public static void main(String[] args) {
+         Demo d=new Demo();
+         d.m1();
+    }
+}
+
+```
+
+### Concept of multiple inheritance for default method ###
+- create multiple interfaces with same default method.
+- ERROR: class Demo inherits unrelated defaults for m1() from types First and Second
+- Code:
+```
+interface First{
+    default void m1(){
+        System.out.println("default method of First..");
+    }
+}
+
+interface Second{
+    default void m1(){
+        System.out.println("default method of Second..");
+    }
+}
+class Demo implements First, Second {
+    
+   
+    public static void main(String[] args) {
+         Demo d=new Demo();
+        
+    }
+}
+```
+- Solve above problem by overriding m1 method in implementation class.
+```
+interface First{
+    default void m1(){
+        System.out.println("default method of First..");
+    }
+}
+
+interface Second{
+    default void m1(){
+        System.out.println("default method of Second..");
+    }
+}
+class Demo implements First, Second {
+    public void m1(){
+        System.out.println("default method of implementation class..");
+    }
+   
+    public static void main(String[] args) {
+         Demo d=new Demo();
+        d.m1();//default method of implementation class..
+    }
+}
+```
+
+- invoke m1 method of First interface.
+```
+interface First{
+    default void m1(){
+        System.out.println("default method of First..");
+    }
+}
+
+interface Second{
+    default void m1(){
+        System.out.println("default method of Second..");
+    }
+}
+class Demo implements First, Second {
+    public void m1(){
+        First.super.m1();
+    }
+   
+    public static void main(String[] args) {
+         Demo d=new Demo();
+        d.m1();//default method of First..
+    }
+}
+```
+- Similarly we can invoke the default method of Second interface also by using **Second.super.m1()**
+
+
+## static method in interface ##
+ - for general utility purpose we don't need to declare static method in class as it doesn't depend on the object, that we can declare in interface itself. hence this concept came in 1.8v of java.
+ - this static method only invoked using interfaceName.methodName();
+ - we can declare main method also inside interface.
+ - This static method of interface is not avaliable to any implementation class of this interface hence we can't invoke this method using class name.
+ - and No need to implement also, if interface contains any abstract method then we need to implement it.
+
+code1:
+```
+interface First{
+    static void m1(){
+        System.out.println("static method of interface");
+    }
+}
+
+class Demo  {
+    
+    public static void main(String[] args) {
+        First.m1();
+    }
+}
+```
+
+- code2: main method inside interface
+  ```
+  interface First{
+    public static void main(String[] args) {
+        System.out.println("interface main method...");
+    }
+}
+```
+  
 
 
 
