@@ -1,4 +1,4 @@
-### Lambda expresssion ###
+# Lambda expresssion #
 
 Lambda expression is a anonymous funtion
 - A function without name
@@ -215,7 +215,7 @@ public class InterfaceConceptDemo {
 
 ```
 
-### Lambda expression with Multithreading ###
+## Lambda expression with Multithreading ##
 
 ```
 class ThreadsWithLambda {
@@ -236,6 +236,126 @@ class ThreadsWithLambda {
     }
 }
 ```
+
+## Lambda expression with Collection ##
+
+with normal approach, without lambda:
+```
+import java.util.*;
+
+
+class MyComparator implements Comparator<Integer>{
+    
+    public int compare(Integer i1, Integer i2){
+        return i1>i2?-1:i1<i2?1:0;
+    }
+}
+public class SortArrayList {
+    public static void main(String[] args) {
+        ArrayList<Integer> list=new ArrayList<>();
+        list.add(12);
+        list.add(2);
+        list.add(7);
+        list.add(1);
+        
+       // Collections.sort(list); calls Comparable's compareTo method which provides default natural sorting order
+       
+       Collections.sort(list, new MyComparator());//customized reverse order
+        System.out.println(list);
+    }
+}
+```
+
+With lambda expression 
+
+```
+import java.util.*;
+
+public class SortArrayList {
+    public static void main(String[] args) {
+        ArrayList<Integer> list=new ArrayList<>();
+        list.add(4);
+        list.add(2);
+        list.add(7);
+        list.add(1);
+        
+       System.out.println(list);
+       Comparator<Integer> c=(i1,i2)->(i1>i2)?-1:(i1<i2)?1:0;
+       Collections.sort(list, c);//customized reverse order
+        System.out.println(list);
+    }
+}
+```
+
+### Lambda expression for Custom Object collection ###
+```
+import java.util.*;
+
+class Student{
+    
+    int sid;
+    String sname;
+    
+    public Student(int sid, String sname){
+        this.sid=sid;
+        this.sname=sname;
+    }
+    
+    public String toString(){
+        return sid+":"+sname;
+    }
+}
+public class ApplyLambdaForCustomObject {
+    public static void main(String[] args) {
+        ArrayList<Student> l=new ArrayList<>();
+        l.add(new Student(2891,"amol"));
+        l.add(new Student(9832,"gunny"));
+        l.add(new Student(3290,"joe"));
+        l.add(new Student(8923,"muni"));
+        System.out.println(l);
+        
+        Collections.sort(l, (s1,s2)->(s1.sid<s2.sid)?-1:(s1.sid>s2.sid)?1:0);//ascending order based on the sid
+        System.out.println(l);
+        
+        Comparator<Student> s = (s1,s2)->s1.sname.compareTo(s2.sname);//aphabatial order
+        
+        Collections.sort(l,s);
+        
+        System.out.println(l);
+    }
+}
+```
+
+
+### Anonymous Inner class vs Lambda Expression ###
+
+We are writing a class which is extending to the thread class(note this has doesn't have any name, called anonymous)
+```
+Thread t=new Thread{
+   public void run(){
+
+  }
+// t is the object of child class of Thread
+};
+```
+now we will create a anonymous class which will implements the Runnable interface.
+```
+Runnable r=new Runnable(){
+   public void run(){
+
+  }
+//r is the object of class which is implementating Runnable interface.
+};
+```
+
+- Anonymous inner class is not equivalent to the lambda expression
+- If anonymous inner class implements a interface which contains single abstract method then only we can replace that anonymous inner class with
+  lambda expression
+
+
+
+
+
 
 
 
