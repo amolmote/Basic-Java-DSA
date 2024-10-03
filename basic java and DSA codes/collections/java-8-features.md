@@ -505,7 +505,7 @@ class Demo  {
 
 - code2: main method inside interface
 
-- 
+- sample code
 ```
   interface First{
     public static void main(String[] args) {
@@ -513,12 +513,555 @@ class Demo  {
     }
 }
 ```
+
+## Predefined Functional Interfaces ##
+
+  
+- java.util.function package
+- Use whenever conditional checks are required.
+
+### Predicate<I> ###
+```
+public interface java.util.function.Predicate<T> {
+  public abstract boolean test(T);
+  public default java.util.function.Predicate<T> and(java.util.function.Predicate<? super T>);
+  public default java.util.function.Predicate<T> negate();
+  public default java.util.function.Predicate<T> or(java.util.function.Predicate<? super T>);
+  public static <T> java.util.function.Predicate<T> isEqual(java.lang.Object);
+  public static <T> java.util.function.Predicate<T> not(java.util.function.Predicate<? super T>);
+}
+```
+
+- Simple example
+```
+import java.util.function.*;
+
+class PredicateDemo {
+    public static void main(String[] args) {
+        
+        Predicate<String> p=s->s.length()>5;
+        System.out.println(p.test("amol"));
+        System.out.println(p.test("Anjali"));
+        System.out.println(p.test("kajal"));
+    }
+}
+```
+
+- Create the list of employees and return the names of employees whose salary is greater then 40000
+
+```
+import java.util.function.*;
+import java.util.*;
+
+class Employee{
+    
+    String name;
+    int salary;
+    
+    public Employee(String name, int salary){
+        this.name=name;
+        this.salary=salary;
+    }
+}
+public class PredicateDemo {
+    public static void main(String[] args) {
+        
+       ArrayList<Employee> l=new ArrayList<>();
+       
+       l.add(new Employee("A", 30000));
+       l.add(new Employee("B", 10000));
+       l.add(new Employee("C", 60000));
+       l.add(new Employee("D", 70000));
+       l.add(new Employee("E", 90000));
+       
+       Predicate<Employee> p=e->e.salary>40000;
+       for(Employee emp: l){
+           if(p.test(emp)){
+               System.out.println(emp.name);
+           }
+       }
+       
+    }
+}
+```
+
+
+
+### Predicate Joining ###
+
+- p1-> return the number which are even
+- p2-> return the number which are greater than 10
+- return the number which is even and greater than 10 -> p1.and(p2)
+- return the number which is even or greater than 10 -> p1.or(p2)
+- return the number which is not even(add number)-> p1.negate()
   
 
+```
+import java.util.function.*;
+
+class PredicateMoreutilities {
+    public static void main(String[] args) {
+        
+        int[] nums={1,2,4,6,7,11,16,19};
+        Predicate<Integer> p1=n->n%2==0;
+        Predicate<Integer> p2=n->n>10;
+        
+        System.out.println("numbers which are even and greater than 10");
+        for(int num: nums){
+            if(p1.and(p2).test(num)){
+                System.out.println(num);
+            }
+        }
+        System.out.println("numbers which are even or greater than 10");
+        for(int num: nums){
+            if(p1.or(p2).test(num)){
+                System.out.println(num);
+            }
+        }
+        
+        System.out.println("numbers which are not even(odd)");
+        for(int num: nums){
+            if(p1.negate().test(num)){
+                System.out.println(num);
+            }
+        }
+    }
+}
+```
 
 
+## Function ##
+- Perform some operation and produce result.
+
+```
+public interface java.util.function.Function<T, R> {
+  public abstract R apply(T);
+  public default <V> java.util.function.Function<V, R> compose(java.util.function.Function<? super V, ? extends T>);
+  public default <V> java.util.function.Function<T, V> andThen(java.util.function.Function<? super R, ? extends V>);
+  public static <T> java.util.function.Function<T, T> identity();
+}
+```
+- Example:
+```
+import java.util.function.*;
 
 
+class FunctionDemo1 {
+    public static void main(String[] args) {
+        Function<Integer,Integer> f=i->i*i;
+        
+        System.out.println("square is: "+f.apply(3));
+        
+        Function<String, Integer> f1=s->s.length();
+        System.out.println(f1.apply("amol"));
+        
+        Function<String, String> upperCase=s->s.toUpperCase();
+           System.out.println(upperCase.apply("amol"));
+    }
+}
+```
+
+- Example2:
+```
+import java.util.function.*;
+
+class Student{
+    
+    String name;
+    int marks;
+    
+    public Student(String name, int marks){
+        this.name=name;
+        this.marks=marks;
+    }
+}
+public class FunctionDemo2 {
+    public static void main(String[] args) {
+        
+        
+        Student[] students = { 
+            new Student("amol", 70),
+           new Student("sagar", 66),
+           new Student("joe", 54),
+           new Student("dan", 34),
+        };
+        
+        Function<Student,String> f=s-> {
+            int mark = s.marks;
+            String grade="";
+            
+            if(mark>=65) grade="A Grade";
+            else if(mark>=50) grade="B Grade";
+            else if(mark>=35) grade="C Grade";
+            else grade="Fail";
+            return grade;
+        };
+        //student data along with grades
+        for(Student std: students){
+            System.out.println("student name: "+std.name);
+            System.out.println("student marks: "+std.marks);
+            System.out.println("student grade: "+f.apply(std));
+            System.out.println();
+        }
+        
+        Predicate<Student> p=s->s.marks>60;
+        
+        System.out.println("student who are having marks greater than 60");
+        for(Student std: students){
+            if(p.test(std)){
+                System.out.println("student name: "+std.name);
+            System.out.println("student marks: "+std.marks);
+            System.out.println("student grade: "+f.apply(std));
+            System.out.println();
+            }
+        }
+    }
+}
+```
+
+### Function chaining ###
+
+- f1.andThen(f2).apply(i);
+first f1 followed by f2
+- f1.compose(f2).apply(i);
+first f2 then followed by f1
+
+```
+import java.util.function.*;
+
+public class FunctionDemo2 {
+    public static void main(String[] args) {
+        
+        Function<Integer, Integer> f1=i->2*i;
+        Function<Integer, Integer> f2=i->i*i;
+        
+        System.out.println(f1.andThen(f2).apply(2));//2*2=4, 4*4=16
+        System.out.println(f1.compose(f2).apply(2));//2*2,2*4=8
+
+    }
+}
+```
+
+
+## Consumer ##
+- Consumer won't return anything it just accept the data and consume it.
+- Consumer interface -
+```
+public interface java.util.function.Consumer<T> {
+  public abstract void accept(T);
+  public default java.util.function.Consumer<T> andThen(java.util.function.Consumer<? super T>);
+}
+```
+
+- example1:
+```
+public class FunctionDemo2 {
+    public static void main(String[] args) {
+        
+        Consumer<String> c=s->System.out.println(s);
+        c.accept("amol");
+        c.accept("kajal");
+    }
+}
+```
+
+- example2: 
+
+
+```
+import java.util.function.*;
+
+class Student{
+    
+    String name;
+    int marks;
+    
+    public Student(String name, int marks){
+        this.name=name;
+        this.marks=marks;
+    }
+}
+public class FunctionDemo2 {
+    public static void main(String[] args) {
+        
+        
+        Student[] students = { 
+            new Student("amol", 70),
+           new Student("sagar", 66),
+           new Student("joe", 54),
+           new Student("dan", 34),
+        };
+        
+        Function<Student,String> f=s-> {
+            int mark = s.marks;
+            String grade="";
+            
+            if(mark>=65) grade="A Grade";
+            else if(mark>=50) grade="B Grade";
+            else if(mark>=35) grade="C Grade";
+            else grade="Fail";
+            return grade;
+        };
+        
+        Consumer<Student> c=std->{
+            System.out.println("student name: "+std.name);
+            System.out.println("student marks: "+std.marks);
+            System.out.println("student grade: "+f.apply(std));
+            System.out.println();
+        };
+        //student data along with grades
+        for(Student std: students){
+          c.accept(std);
+        }
+        
+        Predicate<Student> p=s->s.marks>60;
+        
+        System.out.println("student who are having marks greater than 60");
+        for(Student std: students){
+            if(p.test(std)){
+                c.accept(std);
+            }
+        }
+        
+    }
+}
+```
+
+### Consumer chaining ###
+
+```
+import java.util.function.*;
+
+class MyActivities{
+    
+    String name;
+    public MyActivities(String name){
+        this.name=name;
+    }
+}
+
+public class ConsumerChaining {
+    public static void main(String[] args) {
+        
+        Consumer<MyActivities> c1=a->System.out.println(a.name+ " woke up early");
+         
+         Consumer<MyActivities> c2=a-> System.out.println(a.name+ " went for walking..");    
+         
+         Consumer<MyActivities> c3=a-> System.out.println(a.name+ "'s memories storing in db.."); 
+         
+         Consumer<MyActivities> cc=c1.andThen(c2).andThen(c3);
+         
+         MyActivities activator=new MyActivities("Amol");
+         cc.accept(activator);
+    }
+    
+}
+```
+
+
+## Supplier ##
+
+- it won't take any inpur
+- It only supplies my required object.
+
+```
+public interface java.util.function.Supplier<T> {
+  public abstract T get();
+}
+```
+
+- example:
+```
+import java.util.function.*;
+import java.util.Date;
+
+
+class SupplierDemo {
+    public static void main(String[] args) {
+        Supplier<Date> s=()-> new Date();
+        System.out.println(s.get());
+    }
+}
+```
+
+- Supplier to get the 6 digit otp
+```
+import java.util.function.*;
+import java.util.*;
+
+
+class SupplierDemo {
+    public static void main(String[] args) {
+        Supplier<String> s=()-> {
+            String otp="";
+            for(int i=1;i<=6;i++){
+               otp+=(int)(Math.random()*10);
+            }
+            return otp;
+        };
+        System.out.println(s.get());
+       
+    }
+}
+```
+
+Summary
+- Predicate ---> single argument--> test()   
+- Function ----> single argument---> apply()
+- Comsumer ----> single argument----> accept()
+- Supplier ---> no argmument----> get()
+
+## BiPredicate ##
+- Two input arguments
+
+```
+public interface java.util.function.BiPredicate<T, U> {
+  public abstract boolean test(T, U);
+  public default java.util.function.BiPredicate<T, U> and(java.util.function.BiPredicate<? super T, ? super U>);
+  public default java.util.function.BiPredicate<T, U> negate();
+  public default java.util.function.BiPredicate<T, U> or(java.util.function.BiPredicate<? super T, ? super U>);
+}
+```
+
+```
+import java.util.function.*;
+
+
+class BiPredicateDemo {
+    public static void main(String[] args) {
+        BiPredicate<Integer, Integer> p=(a,b)->(a+b)%2==0;
+        System.out.println(p.test(10,10));
+    }
+}
+```
+## BiFunction ##
+
+## BiConsumer ##
+- Create arraylist using the BiConsumer concept
+
+
+## Premitive predicate types ##
+
+- Normal Predicate type Integer object only, it converts int to Integer(autoboxing) and back to int (autounboxing) while evaluating expressions.
+- This impacts the performance, hence type based Predicates are available those we can use.
+
+- IntPredicate
+- LongPredicate
+- DoublePredicate
+
+## Premitive Function Types ##
+-----------------------------------------------------------------
+- single argument which type fixed input and return any type
+- DoubleFunction: can take input type as double and return any type
+- IntFunction: can take input type as int and return any type
+- LongFunction: can take input type as long and return any type
+
+
+--------------------------------------------
+- Single argument function which is having fixed input and fixed return type
+- DoubleToIntFunction:
+  input: Double
+  return: int
+applyAsInt(double value)
+- DoubleToLongFunction
+  input: double
+return: long
+func: applyAsLong(double value)
+- IntToDoubleFunction: applyAsDouble(int value)
+- IntToLongFunction: applyAsLong(int value)
+
+--------------------------------------------
+- Single argument fixed return type
+- ToIntFunction: return type is int input anything
+        applyAsInt(T u)
+- ToLongFunction
+- ToDoubleFunction
+- ToLongFunction
+
+-------------------------------------------------
+- two argument and fixed return type
+- ToIntBiFunction: return type must be int and input arguments can be of any type
+     applyAsInt(T t, U u)
+
+- ToDoubleBiFunction:  applyAsDouble(T t, U u)
+- ToLongBiFunction:  applyAsLong(T t, U u)
+
+ 
+## Premitive types of Consumer ##
+
+- IntConsumer: void accept(int value)
+- LongConsumer
+- DoubleConsumer
+- ObjDoubleConsumer<T>: void accept(T t, Double d)
+- ObjLongConsumer
+- ObjIntConsumer
+
+## Premitive types of Supplier ##
+- BooleanSupplier: boolean getAsBoolean()
+- IntSupplier: int getAsLong()
+- DoubleDuppier: double getAsDouble()
+- LongSupplier: long getAsLong()
+
+
+## UnaryOperator ##
+- If input and return is of same type then use this
+- child of Function interface
+
+```
+import java.util.function.*;
+
+class UnaryDemo {
+    public static void main(String[] args) {
+        UnaryOperator<Integer> f=n->n*n;
+        System.out.println(f.apply(12));
+    }
+}
+```
+### Premitive types of UnaryOperator ###
+- IntUnaryOperator: return type is int function is: applyAsInt(int value)
+```
+import java.util.function.*;
+
+class UnaryDemo {
+    public static void main(String[] args) {
+        IntUnaryOperator f=n->n*n;
+        System.out.println(f.applyAsInt(7));
+    }
+}
+```
+- DoubleUnaryOperator: applyAsDouble
+- LongUnaryOperator: applyAsDouble
+
+
+## BinaryOperator ##
+- child of **BiFunction interface**.
+- BinaryOperator<T, T, T> all are same type
+- example
+```
+import java.util.function.*;
+
+class BinaryOperatorDemo {
+    public static void main(String[] args) {
+        BinaryOperator<Integer> f=(n1,n2)->n1+n2;
+        System.out.println(f.apply(7,3));
+    }
+}
+```
+
+### Premitive types of BinaryOperator ###
+- IntBinaryOperator 
+```
+import java.util.function.*;
+
+class BinaryOperatorDemo {
+    public static void main(String[] args) {
+        IntBinaryOperator f=(n1,n2)->n1+n2;
+        System.out.println(f.applyAsInt(7,3));
+    }
+}
+```
+- DoubleBinaryOperator: double applyAsDouble(double a, double b)
+- LongBinaryOperator
 
 
 
