@@ -1330,14 +1330,181 @@ public class StreamMapDemo {
 }
 ```
 
+### Examples of Stream based on use cases ###
 - filter(Predicate)
+- use case: return the name of failed students.
+```
+import java.util.*;
+import java.util.stream.*;
+
+class Student{
+    String name;
+    int marks;
+    public Student(String name, int marks){
+        this.name=name;
+        this.marks=marks;
+    }
+    
+    public String toString(){
+        return name+" : "+marks;
+    }
+}
+public class FailedStudents {
+    public static void main(String[] args) {
+       ArrayList<Student> l=new ArrayList<>();
+       l.add(new Student("A",44));
+       l.add(new Student("C",34));
+       l.add(new Student("D",87));
+       l.add(new Student("B",67));
+       l.add(new Student("E",23));
+       List<Student> failedStudents = l.stream().filter(e->e.marks<35).collect(Collectors.toList());
+       System.out.println(failedStudents);
+    }
+}
+```
 - map(Function) 
 - collect
 - count
-- sorted
-- sorted(Comparator)
+- get the count of pass students
+```
+import java.util.*;
+import java.util.stream.*;
+
+class Student{
+    String name;
+    int marks;
+    public Student(String name, int marks){
+        this.name=name;
+        this.marks=marks;
+    }
+    
+    public String toString(){
+        return name+" : "+marks;
+    }
+}
+public class FailedStudents {
+    public static void main(String[] args) {
+       ArrayList<Student> l=new ArrayList<>();
+       l.add(new Student("A",44));
+       l.add(new Student("C",34));
+       l.add(new Student("D",87));
+       l.add(new Student("B",67));
+       l.add(new Student("E",23));
+       List<Student> std=l.stream().filter(e->e.marks>=35).collect(Collectors.toList());
+       System.out.println(std);
+       long passStudents = l.stream().filter(e->e.marks>=35).count();
+       System.out.println("count of pass students: "+passStudents);
+       
+    }
+}
+```
+- sorted(Natural default order sorting based on student names.
+```
+import java.util.*;
+import java.util.stream.*;
+
+class Student{
+    String name;
+    int marks;
+    public Student(String name, int marks){
+        this.name=name;
+        this.marks=marks;
+    }
+    
+    public String toString(){
+        return name+" : "+marks;
+    }
+}
+public class FailedStudents {
+    public static void main(String[] args) {
+       ArrayList<Student> l=new ArrayList<>();
+       l.add(new Student("A",44));
+       l.add(new Student("C",34));
+       l.add(new Student("D",87));
+       l.add(new Student("B",67));
+       l.add(new Student("E",23));
+       //Comparable<Student> c=(e1,e2)-> e1.name.compareTo(e2.name);
+     l.stream().sorted((e1,e2)-> e1.name.compareTo(e2.name)).forEach(System.out::println);
+       
+    }
+}
+```
+- sorted(Comparator): reverse order
+```
+import java.util.*;
+import java.util.stream.*;
+
+class Student{
+    String name;
+    int marks;
+    public Student(String name, int marks){
+        this.name=name;
+        this.marks=marks;
+    }
+    
+    public String toString(){
+        return name+" : "+marks;
+    }
+}
+public class FailedStudents {
+    public static void main(String[] args) {
+       ArrayList<Student> l=new ArrayList<>();
+       l.add(new Student("A",44));
+       l.add(new Student("C",34));
+       l.add(new Student("D",87));
+       l.add(new Student("B",67));
+       l.add(new Student("E",23));
+       //Comparable<Student> c=(e1,e2)-> e1.name.compareTo(e2.name);
+     l.stream().sorted((e1,e2)-> -e1.name.compareTo(e2.name)).forEach(System.out::println);//or use Comparator compare()
+       
+    }
+}
+```
 - min(Comparator)
 - max(Comparator)
+- Example for min and max:
+```
+import java.util.*;
+import java.util.stream.*;
+
+class Student{
+    String name;
+    int marks;
+    public Student(String name, int marks){
+        this.name=name;
+        this.marks=marks;
+    }
+    
+    public String toString(){
+        return name+" : "+marks;
+    }
+}
+public class FailedStudents {
+    public static void main(String[] args) {
+       ArrayList<Student> l=new ArrayList<>();
+       l.add(new Student("A",44));
+       l.add(new Student("C",34));
+       l.add(new Student("D",87));
+       l.add(new Student("B",67));
+       l.add(new Student("E",23));
+    
+     Student stdMin= l.stream().min((e1,e2)-> {
+         Integer i1=e1.marks;
+         Integer i2=e2.marks;
+         return i1.compareTo(i2);
+     }).get();
+    
+    System.out.println(stdMin);//student who has min marks
+    
+    Student stdMax= l.stream().max((e1,e2)-> {
+         Integer i1=e1.marks;
+         Integer i2=e2.marks;
+         return i1.compareTo(i2);
+     }).get();
+      System.out.println(stdMax);//student who has max marks
+    }
+}
+```
 - forEach()
 - toArray()
 - Stream.of(..)
