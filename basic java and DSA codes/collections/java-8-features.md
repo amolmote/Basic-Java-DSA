@@ -1460,8 +1460,8 @@ public class FailedStudents {
     }
 }
 ```
-- min(Comparator)
-- max(Comparator)
+- Optional<T> min(Comparator)
+- Optional<T> max(Comparator)
 - Example for min and max:
 ```
 import java.util.*;
