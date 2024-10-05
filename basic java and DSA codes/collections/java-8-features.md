@@ -1063,12 +1063,285 @@ class BinaryOperatorDemo {
 - DoubleBinaryOperator: double applyAsDouble(double a, double b)
 - LongBinaryOperator
 
+-----------------------------------------------------------------------------------------
+## Method and Construtor Reference ##
+- FunctionalInterface abstract method refers to the existing method for code reusability.
+- method referance is a alternative to the lambda expression.
+- main rule is: in method reference the argument and argument type of methods should match, different modifiers/return types allowed.
+- if the implementation is already available better to go for method reference otherwise use lambda expression.
+example:
+```
+//acceptable
+public void run();
+public void m1(){}
+
+//acceptable
+public void run();
+private void m1(){}
+
+//acceptable
+public void run();
+public int m1(){}
+
+//invalid
+public void run();
+public void m1(int a){}
+```
+- for static method: className::methodName
+- for instance method: objectReference::methodName
 
 
+### Case 1 using method reference for static method ###
+
+```
+class Case1 {
+
+   public static void test(){
+        for(int i=0;i<6;i++){
+              System.out.println("child thread.."+i);
+          } 
+    }
+    public static void main(String[] args) {
+        Runnable r=()->{
+          for(int i=0;i<6;i++){
+              System.out.println("child thread.."+i);
+          }  
+        };
+        
+        Thread t=new Thread(r);
+        t.start();
+    }
+}
+```
+- Refer to above implementation run method(lambda expression) to the existing test method
+```
+class Case1 {
+    
+    public static void test(){
+        for(int i=0;i<6;i++){
+              System.out.println("child thread.."+i);
+          } 
+    }
+    public static void main(String[] args) {
+        Runnable r=Case1::test;
+        
+        Thread t=new Thread(r);
+        t.start();
+    }
+}
+```
+### Case 2 using method reference for instance method ###
+```
+class Case2 {
+    
+    public void test(){
+        for(int i=0;i<6;i++){
+              System.out.println("child thread.."+i);
+          } 
+    }
+    public static void main(String[] args) {
+        Case2 c=new Case2();
+        
+        Runnable r=c::test;
+        
+        Thread t=new Thread(r);
+        t.start();
+    }
+}
+```
+### Case3 using different return type for implementated method ###
+```
+class Case3 {
+    
+    public static int test(){
+        for(int i=0;i<6;i++){
+              System.out.println("child thread.."+i);
+          } 
+          return 0;
+    }
+    public static void main(String[] args) {
+        
+        
+        Runnable r=Case3::test;
+        
+        Thread t=new Thread(r);
+        t.start();
+    }
+}
+```
+### Case4 using different method argument implementated method ###
+```
 
 
+class Case4 {
+    
+    public static void test(int a){
+        for(int i=0;i<6;i++){
+              System.out.println("child thread.."+i);
+          } 
+    }
+    public static void main(String[] args) {
+        
+        
+        Runnable r=Case4::test;
+        
+        Thread t=new Thread(r);
+        t.start();
+    }
+}
+
+error:
+Runnable r=Case3::test;
+                   ^
+    method test in class Case3 cannot be applied to given types
+      required: int
+      found: no arguments
+      reason: actual and formal argument lists differ in length
+```
+
+- Example:
+```
 
 
+interface Interf{
+    public void add(int a, int b);
+}
+public class Example {
+    
+    public static void test(int x, int y){
+        System.out.println("sum is: "+(x+y));
+    }
+    public static void main(String[] args) {
+        
+        Interf i = Example::test;
+        i.add(40,30);
+    }
+}
+```
+
+
+## Constructor reference ##
+- Test::new => constructor reference
+- If the functional interface method return the object then we should go for constructor reference.
+
+```
+interface Interf{
+    public Student getObject();
+}
+
+class Student{
+    public Student(){
+        System.out.println("Student class object instantiated..");
+    }
+}
+public class ConstructorRefDemo {
+    public static void main(String[] args) {
+        Interf i=Student::new;
+        Student s1=i.getObject();
+        Student s2=i.getObject();
+    }
+}
+```
+- Constructor reference Student::new refers to the FunctionalInterface getObject method.
+
+- Constructor reference with argument
+```
+interface Interf{
+    public Student getObject(String name);
+}
+
+class Student{
+    public Student(String name){
+        System.out.println("Student class object instantiated for student: "+name);
+    }
+}
+public class ConstructorRefDemo {
+    public static void main(String[] args) {
+        Interf i=Student::new;
+        Student s1=i.getObject("Amol");
+        Student s2=i.getObject("Kajal");
+    }
+}
+```
+
+## Streams API ##
+
+- If we want to process objects from collection then we should go for streams.
+- Stream s=c.stream()
+- present in java.util.stream package 
+
+### Example1: create the list of even elements ###
+```
+import java.util.*;
+import java.util.stream.*;
+
+class StreamDemo {
+    public static void main(String[] args) {
+        ArrayList<Integer> l=new ArrayList<>();
+        l.add(9);
+        l.add(3);
+        l.add(8);
+        l.add(7);
+        l.add(12);
+        l.add(10);
+        
+        
+        System.out.println(l);
+        List<Integer> ans= l.stream().filter(e->e%2==0).collect(Collectors.toList());
+        
+        System.out.println(ans);
+    }
+}
+```
+--------------------------------------------------------------------------
+### Example1: add 10 marks in final score ###
+
+```
+import java.util.*;
+import java.util.stream.*;
+
+class Student{
+    String name;
+    int marks;
+    
+    public Student(String name, int marks){
+        this.name=name;
+        this.marks=marks;
+    }
+    
+    public String toString(){
+        return name+" : "+marks;
+    }
+}
+public class StreamMapDemo {
+    public static void main(String[] args) {
+        ArrayList<Student> list=new ArrayList<>();
+        list.add(new Student("A", 68));
+        list.add(new Student("D", 66));
+        list.add(new Student("E", 90));
+        list.add(new Student("B", 78));
+        list.add(new Student("E", 47));
+        System.out.println(list);
+        
+       List<Student> finalList = list.stream().map(s->(new Student(s.name,s.marks+5))).collect(Collectors.toList());
+        
+        System.out.println(finalList);
+    }
+}
+```
+
+- filter(Predicate)
+- map(Function) 
+- collect
+- count
+- sorted
+- sorted(Comparator)
+- min(Comparator)
+- max(Comparator)
+- forEach()
+- toArray()
+- Stream.of(..)
+  
 
 
 
