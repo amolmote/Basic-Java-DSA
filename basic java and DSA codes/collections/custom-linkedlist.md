@@ -72,7 +72,7 @@ public class Main {
           return newNode;
         }
         
-        Node preNode=currNode;
+        Node prevNode=currNode;
         prevNode.next=insert(val,idx-1,currNode.next);
         return prevNode;
     }
