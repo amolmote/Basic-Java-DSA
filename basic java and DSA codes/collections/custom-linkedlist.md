@@ -78,4 +78,82 @@ public class Main {
     }
 ```
 
+## Binary Search Tree(BST)
+
+```
+// Online Java Compiler
+// Use this editor to write, compile and run your Java code online
+
+class Node{
+    int val;
+    Node left;
+    Node right;
+    int height;
+    
+    public Node(int val){
+        this.val = val;
+    }
+    
+    public static int getHeight(Node node){
+        if(node==null){
+            return 0;
+        }
+        
+        return node.height;
+    }
+}
+
+class BST {
+    Node root;
+    
+    public void insert(int val){
+        root = insert(root, val);
+    }
+    public Node insert(Node node, int val){
+        if(node==null){
+            Node n=new Node(val);
+            return n;
+        }
+        
+        if(val< node.val){
+            node.left = insert(node.left,val);
+        }
+        if(val> node.val){
+            node.right = insert(node.right,val);
+        }
+        
+        node.height = Math.max(node.getHeight(node.left), node.getHeight(node.right)) + 1;
+        return node;
+    }
+    
+    public void disp(){
+        disp(root);
+    }
+    public void disp(Node node){
+        if(node==null){
+            return;
+        }
+        disp(node.left);
+        System.out.print(node.val+" ");
+        disp(node.right);
+    }
+    
+}
+public class Main {
+    public static void main(String[] args) {
+        BST t = new BST();
+        t.insert(10);
+        t.insert(6);
+        t.insert(15);
+        t.insert(4);
+        t.insert(8);
+        t.disp();
+    }
+}
+```
+
+<img width="494" alt="image" src="https://github.com/user-attachments/assets/6365817a-d290-4203-81b9-9b45fb920a72" />
+
+
+
 
