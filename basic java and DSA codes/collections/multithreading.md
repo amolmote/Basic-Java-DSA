@@ -1123,7 +1123,7 @@ public class MainThread {
       
       synchronized(t){ //acquired the lock of ChildThread object
           System.out.println("main thread trying to call wait()..");//1
-          t.wait();//released the lock of ChildThread object.
+          t.wait();//main thread released the lock of ChildThread object.
           System.out.println("main thread received notification...");//4
           System.out.println("final ans: "+t.total);
       }
