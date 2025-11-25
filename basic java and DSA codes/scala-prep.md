@@ -734,6 +734,10 @@ class MyActor extends Actor { def receive = { case x => println(x) } }
 ### 58. Actor supervision?
 **Explanation:**  
 Parent actors monitor and restart child actors on failure. Implements resilient systems.
+“Supervision Strategy is Akka’s built-in fault-tolerance mechanism.
+Whenever a child throws an exception, the parent decides whether to restart, resume, stop or escalate the child.
+This gives the system self-healing capabilities.
+Instead of spreading try/catch everywhere, we centralize failure handling at the parent actor, making the entire system resilient and predictable.”
 
 **Example:**
 ```scala
